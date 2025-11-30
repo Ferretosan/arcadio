@@ -1,17 +1,20 @@
 {
   "sections": [
+    { "title": "arcadio Originals", "tag": "arcadio" },
     { "title": "Featured", "tag": "featured" },
-    { "title": "New Releases", "tag": "new" }
+    { "title": "All Games", "tag": "all" }
   ],
   "games": [
-    { "id": "snow-rider-3d", "title": "Snow Rider 3D", "url": "games/snow-rider-3d/index.html", "thumbnail": "games/snow-rider-3d/thumbnail.png", "tags": ["new", "featured"] },
-    { "id": "slope", "title": "Slope", "url": "games/slope/index.html", "thumbnail": "games/slope/thumbnail.png", "tags": ["new", "featured"] },
-    { "id": "minecraft-1.8", "title": "Minecraft 1.8", "url": "games/minecraft-1.8/index.html", "thumbnail": "games/minecraft-1.8/thumbnail.png", "tags": ["new", "featured"] },
-    { "id": "minecraft-1.12.2", "title": "Minecraft 1.12.2", "url": "games/minecraft-1.12.2/index.html", "thumbnail": "games/minecraft-1.12.2/thumbnail.png", "tags": ["new"] },
-    { "id": "crossy-road", "title": "Crossy Road", "url": "games/crossy-road/index.html", "thumbnail": "games/crossy-road/thumbnail.png", "tags": ["new", "featured"] },
-    { "id": "minesweeper", "title": "Minesweeper", "url": "games/minesweeper/index.html", "thumbnail": "games/minesweeper/thumbnail.png", "tags": ["new"] },
-    { "id": "motox3m", "title": "Moto X3M", "url": "games/motox3m/index.html", "thumbnail": "games/motox3m/thumbnail.png", "tags": ["new"] },
-    { "id": "motox3m2", "title": "Moto X3M 2", "url": "games/motox3m2/index.html", "thumbnail": "games/motox3m2/thumbnail.png", "tags": ["new"] },
-    { "id": "pacman", "title": "Pac-Man", "url": "games/pacman/index.html", "thumbnail": "games/pacman/thumbnail.png", "tags": ["new"] }
+    { "id": "snow-rider-3d", "title": "Snow Rider 3D", "url": "games/snow-rider-3d/index.html", "thumbnail": "games/snow-rider-3d/thumbnail.png", "tags": ["all", "featured"] },
+    { "id": "slope", "title": "Slope", "url": "games/slope/index.html", "thumbnail": "games/slope/thumbnail.png", "tags": ["all", "featured"] },
+    { "id": "minecraft-1.8", "title": "Minecraft 1.8", "url": "games/minecraft-1.8/index.html", "thumbnail": "games/minecraft-1.8/thumbnail.png", "tags": ["all", "featured"] },
+    { "id": "minecraft-1.12.2", "title": "Minecraft 1.12.2", "url": "games/minecraft-1.12.2/index.html", "thumbnail": "games/minecraft-1.12.2/thumbnail.png", "tags": ["all"] },
+    { "id": "crossy-road", "title": "Crossy Road", "url": "games/crossy-road/index.html", "thumbnail": "games/crossy-road/thumbnail.png", "tags": ["all", "featured"] },
+    { "id": "minesweeper", "title": "Minesweeper", "url": "games/minesweeper/index.html", "thumbnail": "games/minesweeper/thumbnail.png", "tags": ["all"] },
+    { "id": "motox3m", "title": "Moto X3M", "url": "games/motox3m/index.html", "thumbnail": "games/motox3m/thumbnail.png", "tags": ["all"] },
+    { "id": "motox3m2", "title": "Moto X3M 2", "url": "games/motox3m2/index.html", "thumbnail": "games/motox3m2/thumbnail.png", "tags": ["all"] },
+    { "id": "pacman", "title": "Pac-Man", "url": "games/pacman/index.html", "thumbnail": "games/pacman/thumbnail.png", "tags": ["all"] },
+    { "id": "avoid-the-blocks", "title": "Avoid the Blocks", "url": "games/avoid-the-blocks/index.html", "thumbnail": "games/avoid-the-blocks/thumbnail.png", "tags": ["all", "arcadio"] },
+    { "id": "avoid-the-blocks-2", "title": "Avoid the Blocks 2", "url": "games/avoid-the-blocks-2/index.html", "thumbnail": "games/avoid-the-blocks-2/thumbnail.png", "tags": ["all", "arcadio"] }
   ]
 }
