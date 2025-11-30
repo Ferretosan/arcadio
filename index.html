@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcadio [BETA] | Free unblocked games for everone</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.png">
+</head>
+<body>
+    <div class="content">
+        <img class="artwork" src="artwork.png">
+        
+        <div class="nav">
+            <p>Suggest a game | Copyright</p>
+        </div>
+
+        <div id="intro">
+            <h1>That's right - <i>arcadio</i> is 100% free!</h1>
+            <p><i>arcadio</i> is a free and open source project licenced under the MIT licence, with source code available on <a href="https://github.com/ferretosan/arcadio">Github</a>. But, you probably aren't here for all that yap. You're here for the games! So just, scroll down, stop reading this.</p>
+        </div>
+
+                <section id="categories" aria-live="polite"></section>
+                <script src="games.js" defer></script>
+                <p>+ More games coming soon!</p>
+    </div>
+        <!-- Fullscreen confirm modal -->
+        <div id="fs-modal-backdrop" class="modal-backdrop" aria-hidden="true">
+            <div class="modal" role="dialog" aria-labelledby="fs-modal-title" aria-modal="true">
+                <h3 id="fs-modal-title">Open game in fullscreen?</h3>
+                <p>You can open the game in a new tab. Choose whether to start in fullscreen.</p>
+                <div class="modal-actions">
+                    <button id="fs-cancel" class="btn" type="button">Cancel</button>
+                    <button id="fs-no" class="btn" type="button">Open windowed</button>
+                    <button id="fs-yes" class="btn btn-primary" type="button">Open fullscreen</button>
+                </div>
+            </div>
+        </div>
+</body>
+</html>

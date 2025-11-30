@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Minesweeper</title>
+	<link rel="stylesheet" href="Mine.Style.css" />
+	<script src="Mine.Code.js"></script>
+	<style>
+		html,body{height:100%;margin:0;background:#0b0a2e;color:#fff;font-family:Nunito,system-ui,sans-serif}
+		.topbar{position:sticky;top:0;display:flex;gap:8px;justify-content:flex-end;padding:8px;background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,0))}
+		.btn{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer;font-weight:700}
+		.btn:hover{background:rgba(255,255,255,0.28)}
+		#playwrap{min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:16px}
+		#playground{max-width:100%;overflow:auto}
+	</style>
+	<script>
+		function goHome(){ location.href = 'index.html'; }
+	</script>
+</head>
+<body>
+	<div class="topbar">
+		<button class="btn" onclick="goHome()">Restart</button>
+	</div>
+	<div id="playwrap">
+		<div id="playground"></div>
+	</div>
+	<script>
+		var the_row = 8,the_col = 8,the_mine = 10;
+		var queryStr = document.location.search;
+		var nums = queryStr.match(/\d+/g);
+		if(nums){ the_row = nums[0]; the_col = nums[1]; the_mine = nums[2]; }
+		startMinesweeper(the_row,the_col,the_mine);
+	</script>
+</body>
+</html>
+<?xml version="1.0" encoding="utf-8"?>
+<!doctype html public "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
+<head>
+	<title>Minesweeper</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Language" content="en-US" />
+	<meta content="all" name="robots" />
+	<meta name="title" content="" />
+	<meta name="author" content="VincentChen" />
+	<meta name="subject" content="" />
+	<meta name="language" content="en-US" />
+	<meta name="keywords" content="" />
+	<link rel="icon" href="" type="image/x-icon" />
+	<link rel="shortcut icon" href="" type="image/x-icon" /> 
+	<link rel="stylesheet" href="Mine.Style.css" type="text/css" media="all"  />
+	<script language="JavaScript" type="text/javascript" src="Mine.Code.js"></script>
+</head>
+<body>
+<div id="playground">
+</div>
+<script language="JavaScript" type="text/javascript">
+<!--
+	var the_row = 8,the_col = 8,the_mine = 10;
+	var num_arr;
+	var queryStr = document.location.search;
+	//var pat = /^\?{1}row=(\d+)\&{1}col=(\d+)\&{1}mine=(\d+)$/ig;
+	//regx to match the entire query string
+	var pat = /\d+/ig;
+	num_arr = queryStr.match(pat);
+	if(num_arr != null)
+	{
+		the_row = num_arr[0];
+		the_col = num_arr[1];
+		the_mine = num_arr[2];	
+	}
+	startMinesweeper(the_row,the_col,the_mine);
+	
+	function closeWindow()
+	{
+		window.open('', '_self', ''); //bug fix for Chrome
+		window.close();
+	}
+//-->
+</script>
+<p>
+<input type="button" value="Restart!" onclick="location.href='index.html';" />
+<input type="button" value="I'm tired!" onclick="javascript:closeWindow();" />
+</p>
+<p>
+Icon Descriptions:
+</p>
+<table>
+<tr>
+	<td><img src="images/smile.gif" border="0"></td>
+	<td>Take it easy and play carefully!</td>
+</tr>
+<tr>
+	<td><img src="images/win.gif" border="0"></td>
+	<td>You win! Awesome!</td>
+</tr>
+<tr>
+	<td><img src="images/blast.gif" border="0"></td>
+	<td>You lose...</td>
+</tr>
+<tr>
+	<td><img src="images/error.gif" border="0"></td>
+	<td>You have tagged a wrong place.</td>
+</tr>
+<tr>
+	<td><img src="images/flag.gif" border="0"></td>
+	<td>There is a mine here.</td>
+</tr>
+<tr>
+	<td><img src="images/bomb.gif" border="0"></td>
+	<td>This is a dangerous mine!</td>
+</tr>
+</table>
+<p>
+&copy;2012 <a href="http://vincentchen.me">vincentchen.me</a> All Right Reserved.
+</p>
+</body>
+</html>

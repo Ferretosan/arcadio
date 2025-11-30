@@ -1,0 +1,162 @@
+.content{
+  position: relative;
+  z-index: 1;
+  margin-left: 20%;
+  margin-right: 20%;
+
+  font-family: "Nunito";
+  color: white;
+}
+
+.content a {
+    color: white;
+}
+
+.content a:hover {
+    color: #d0c5d4;
+}
+
+.content .artwork{
+    width: 100%;
+}
+
+body{
+    background: #191769;
+    background: radial-gradient(at left top, #191769, #8544A8);
+    min-height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center center;
+
+}
+
+/* Categories + Games Grid */
+#categories{
+    margin-top: 24px;
+}
+
+.category-section{
+    margin-bottom: 36px;
+}
+
+.category-title{
+    margin: 0 0 12px;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.games-grid{
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.game-card{
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+}
+
+.game-thumb{
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+
+.game-thumb img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.game-card:hover .game-thumb{
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.3);
+}
+
+.game-title{
+    margin-top: 8px;
+    padding: 0 4px;
+    font-size: 0.95rem;
+    font-weight: 800;
+}
+
+/* Responsive columns for smaller screens */
+@media (max-width: 1200px){
+    .games-grid{ grid-template-columns: repeat(4, minmax(0,1fr)); }
+}
+
+@media (max-width: 900px){
+    .games-grid{ grid-template-columns: repeat(3, minmax(0,1fr)); }
+}
+
+@media (max-width: 700px){
+    .games-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+
+@media (max-width: 480px){
+    .games-grid{ grid-template-columns: 1fr; }
+}
+
+/* Modal styles */
+.modal-backdrop{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal{
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 16px;
+    color: white;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    font-family: Nunito;
+}
+
+.modal h3{
+    margin: 0 0 8px;
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.modal p{
+    margin: 0 0 16px;
+}
+
+.modal-actions{
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.btn{
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.1);
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-primary{
+    background: #6c4bb6;
+    border-color: #8a6dd6;
+}
+
+.modal-backdrop.show{ display: flex; }

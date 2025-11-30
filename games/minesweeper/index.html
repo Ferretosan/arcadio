@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Minesweeper</title>
+  <link rel="stylesheet" href="Mine.Style.css" />
+  <style>
+    html,body{height:100%;margin:0;background:#0b0a2e;color:#fff;font-family:Nunito,system-ui,sans-serif}
+    .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:24px}
+    .card{max-width:560px;width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);border-radius:12px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,0.35)}
+    h1{margin:0 0 8px;font-size:1.4rem}
+    p{margin:0 0 12px;color:#e8e6ef}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+    .btn,.btn-outline{display:flex;align-items:center;justify-content:center;border-radius:10px;padding:10px 12px;font-weight:800;cursor:pointer;text-decoration:none;color:#fff}
+    .btn{background:#6c4bb6;border:1px solid #8a6dd6}
+    .btn:hover{background:#7a59c7}
+    .btn-outline{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3)}
+    .row{display:flex;gap:8px;margin-top:8px}
+    .row input{flex:1;min-width:0;border-radius:8px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.08);color:#fff;padding:8px}
+    .hint{font-size:12px;opacity:.9;margin-top:8px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Minesweeper</h1>
+      <p>Choose a difficulty or set your own board size.</p>
+      <div class="grid">
+        <button class="btn-outline" data-row="9" data-col="9" data-mine="10">Beginner 9x9 · 10</button>
+        <button class="btn-outline" data-row="16" data-col="16" data-mine="40">Intermediate 16x16 · 40</button>
+        <button class="btn-outline" data-row="16" data-col="30" data-mine="99">Expert 16x30 · 99</button>
+      </div>
+      <div class="row">
+        <input id="rows" type="number" min="8" max="50" value="9" aria-label="Rows" />
+        <input id="cols" type="number" min="8" max="50" value="9" aria-label="Columns" />
+        <input id="mines" type="number" min="10" value="10" aria-label="Mines" />
+      </div>
+      <div class="row" style="justify-content:flex-end">
+        <button id="start" class="btn" type="button">Start</button>
+      </div>
+      <div class="hint">First click is always safe. Use right-click to place flags, middle-click to chord.</div>
+    </div>
+  </div>
+
+  <script>
+    function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+    function start(row,col,mine){
+      row = clamp(Number(row)||9,8,50);
+      col = clamp(Number(col)||9,8,50);
+      const maxMines = Math.floor((row*col)/2);
+      mine = clamp(Number(mine)||10,10,maxMines);
+      const url = `Mine.View.html?row=${row}&col=${col}&mine=${mine}`;
+      location.href = url;
+    }
+    document.querySelectorAll('.btn-outline').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.getElementById('rows').value = btn.dataset.row;
+        document.getElementById('cols').value = btn.dataset.col;
+        document.getElementById('mines').value = btn.dataset.mine;
+        start(btn.dataset.row, btn.dataset.col, btn.dataset.mine);
+      });
+    });
+    document.getElementById('start').addEventListener('click',()=>{
+      start(
+        document.getElementById('rows').value,
+        document.getElementById('cols').value,
+        document.getElementById('mines').value
+      );
+    });
+  </script>
+</body>
+</html>
