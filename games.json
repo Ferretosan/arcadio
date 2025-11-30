@@ -12,7 +12,6 @@
     { "id": "minesweeper", "title": "Minesweeper", "url": "games/minesweeper/index.html", "thumbnail": "games/minesweeper/thumbnail.png", "tags": ["new"] },
     { "id": "motox3m", "title": "Moto X3M", "url": "games/motox3m/index.html", "thumbnail": "games/motox3m/thumbnail.png", "tags": ["new"] },
     { "id": "motox3m2", "title": "Moto X3M 2", "url": "games/motox3m2/index.html", "thumbnail": "games/motox3m2/thumbnail.png", "tags": ["new"] },
-    { "id": "pacman", "title": "Pac-Man", "url": "games/pacman/index.html", "thumbnail": "games/pacman/thumbnail.png", "tags": ["new"] },
-    { "id": "drift-boss", "title": "Drift Boss", "url": "games/drift-boss/index.html", "thumbnail": "games/drift-boss/thumbnail.png", "tags": ["new"] }
+    { "id": "pacman", "title": "Pac-Man", "url": "games/pacman/index.html", "thumbnail": "games/pacman/thumbnail.png", "tags": ["new"] }
   ]
 }
