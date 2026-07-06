@@ -461,17 +461,6 @@
       "thumbnail": "newicons/doom.png"
     },
     {
-      "id": "drift",
-      "title": "Drift",
-      "url": "games/drift/index.html",
-      "tags": [
-        "racing",
-        "car",
-        "all"
-      ],
-      "thumbnail": "newicons/drift.jpg"
-    },
-    {
       "id": "drifthunters",
       "title": "Drift Hunters",
       "url": "games/drifthunters/index.html",
