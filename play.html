@@ -1,55 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Arcadio Launcher</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    body, html { height: 100%; }
-    .play-overlay{ position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: radial-gradient(at left top, #191769, #8544A8); }
-    .play-btn{ font-family: Nunito, system-ui, -apple-system; font-weight: 900; font-size: 1.2rem; padding: 14px 18px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.25); background: rgba(255,255,255,0.15); color: white; cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.35); }
-    .play-btn:hover{ background: rgba(255,255,255,0.22); }
-    .player{ position: fixed; inset: 0; background: black; display: none; }
-    .player.show{ display: block; }
-    .player iframe{ width: 100%; height: 100%; border: 0; }
-  </style>
-  <link rel="icon" href="favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>arcadio [BETA] | Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.png">
 </head>
 <body>
-  <div class="play-overlay" id="play-overlay" aria-live="polite">
-    <button id="start-btn" class="play-btn" type="button" aria-label="Play in Fullscreen">
-      <img src="img/player-play.svg" alt="Play" style="display:block;width:48px;height:48px;">
-    </button>
-  </div>
-  <div class="player" id="player"></div>
-  <script>
-    const params = new URLSearchParams(location.search);
-    const targetUrl = params.get('url');
-    const overlay = document.getElementById('play-overlay');
-    const startBtn = document.getElementById('start-btn');
-    const player = document.getElementById('player');
+    <nav class="navbar">
+      <a href="index.html" class="navbar-brand">
+        <img src="favicon.png" alt="logo" width="24" height="24">
+        <span>arcadio</span>
+      </a>
+      <ul class="navbar-links">
+        <li><a href="index.html">Library</a></li>
+        <li><a href="https://ferretosan.com">Made by Ferretosan!</a></li>
+        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScVePC8RahhnT1Hk_s6ITYWqAmxZubXW4-5F3y_sEyd7rlMDQ/viewform">Bug report</a></li>
+        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScqWY2Q1Ce2ibpoqIxBPJv6vNnmdEZon7TG0fT_u_LjbDV14Q/viewform">Suggest a game</a></li>
+      </ul>
+    </nav>
 
-    if(!targetUrl){
-      window.location.href = 'index.html';
-    } else {
-      startBtn.addEventListener('click', async () => {
-        overlay.style.display = 'none';
-        player.classList.add('show');
-        const iframe = document.createElement('iframe');
-        iframe.src = targetUrl;
-        iframe.allow = 'fullscreen; autoplay; gamepad; cross-origin-isolated';
-        iframe.setAttribute('allowfullscreen', '');
-        player.appendChild(iframe);
-        try{
-          if(player.requestFullscreen){
-            await player.requestFullscreen();
-          }
-        } catch(e){
-          console.warn('Fullscreen request failed:', e);
+    <div id="game-root" class="game-page"></div>
+
+    <script>
+      (async function(){
+        const params = new URLSearchParams(location.search);
+        const gameId = params.get('game');
+        const root = document.getElementById('game-root');
+        if(!gameId){
+          root.innerHTML = '<p>No game selected.</p>';
+          return;
         }
-      });
-    }
-  </script>
-</body>
+
+        let data;
+        try{
+          const res = await fetch('games.json');
+          if(!res.ok) throw new Error('Failed to load games.json');
+          data = await res.json();
+        }catch(e){
+          root.innerHTML = '<p>Could not load games list.</p>';
+          return;
+        }
+
+        const game = (data.games || []).find(g => g.id === gameId);
+        if(!game){
+          root.innerHTML = '<p>Game not found.</p>';
+          return;
+        }
+
+        const tags = Array.isArray(game.tags) ? game.tags.filter(Boolean) : [];
+        const related = (data.games || [])
+          .filter(g => g.id !== game.id && g.tags && g.tags.some(t => tags.includes(t)))
+          .slice(0, 12);
+
+        const tagsHtml = tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+        const relatedHtml = related.map(g => {
+          const thumb = g.thumbnail ? `<img src="${escapeHtml(g.thumbnail)}" alt="${escapeHtml(g.title)}">` : '';
+          return `<a class="suggested-card" href="play.html?game=${encodeURIComponent(g.id)}">
+            <div class="game-thumb">${thumb}</div>
+            <div class="game-title">${escapeHtml(g.title)}</div>
+          </a>`;
+        }).join('');
+
+        const backHref = 'index.html';
+        const fullscreenUrl = `play.html?game=${encodeURIComponent(game.id)}&fullscreen=1`;
+
+        root.innerHTML = `
+          <div class="game-hero">
+            ${game.thumbnail ? `<img class="game-hero-img" src="${escapeHtml(game.thumbnail)}" alt="${escapeHtml(game.title)}">` : ''}
+            <div class="game-hero-body">
+              <h1>${escapeHtml(game.title)}</h1>
+              <div class="game-tags">${tagsHtml}</div>
+              <div class="game-actions">
+        <a class="btn" href="${escapeHtml(backHref)}">Back</a>
+        <button class="btn btn-primary" id="fs-btn">Play in Fullscreen</button>
+              </div>
+            </div>
+          </div>
+          <div class="game-frame">
+            <iframe src="${escapeHtml(game.url)}" allow="fullscreen; autoplay; gamepad; cross-origin-isolated" allowfullscreen title="${escapeHtml(game.title)}"></iframe>
+          </div>
+          ${related.length ? `
+          <div class="suggested-section">
+            <h2>Suggested games</h2>
+            <div class="suggested-grid">${relatedHtml}</div>
+          </div>` : ''}
+        `;
+
+        if(params.get('fullscreen') === '1'){
+          try{ document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); }catch(e){}
+        }
+
+        const fsBtn = document.getElementById('fs-btn');
+        if(fsBtn){
+          fsBtn.addEventListener('click', () => {
+            const frame = document.querySelector('.game-frame');
+            if(!frame) return;
+            if(frame.requestFullscreen){
+              frame.requestFullscreen().catch(()=>{});
+            } else if(frame.webkitRequestFullscreen){
+              frame.webkitRequestFullscreen();
+            }
+          });
+        }
+
+        function escapeHtml(str){
+          return String(str).replace(/[&<>"']/g, function(m){
+            return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'})[m];
+          });
+        }
+      })();
+    </script>
+  </body>
 </html>

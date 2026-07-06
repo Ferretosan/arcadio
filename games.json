@@ -1,28 +1,1554 @@
 {
   "sections": [
-    { "title": "arcadio Originals", "tag": "arcadio" },
-    { "title": "Featured", "tag": "featured" },
-    { "title": "All Games", "tag": "all" }
+    {
+      "title": "arcadio+ [Originals]",
+      "tag": "arcadio"
+    },
+    {
+      "title": "All games",
+      "tag": "all"
+    }
   ],
   "games": [
-    { "id": "snow-rider-3d", "title": "Snow Rider 3D", "url": "games/snow-rider-3d/index.html", "thumbnail": "games/snow-rider-3d/thumbnail.png", "tags": ["all", "featured"] },
-    { "id": "slope", "title": "Slope", "url": "games/slope/index.html", "thumbnail": "games/slope/thumbnail.png", "tags": ["all", "featured"] },
-    { "id": "minecraft-1.8", "title": "Minecraft 1.8", "url": "games/minecraft-1.8/index.html", "thumbnail": "games/minecraft-1.8/thumbnail.png", "tags": ["all", "featured"] },
-    { "id": "minecraft-1.12.2", "title": "Minecraft 1.12.2", "url": "games/minecraft-1.12.2/index.html", "thumbnail": "games/minecraft-1.12.2/thumbnail.png", "tags": ["all"] },
-    { "id": "crossy-road-space", "title": "Crossy Road Space", "url": "games/crossy-road-space/index.html", "thumbnail": "games/crossy-road-space/thumbnail.png", "tags": ["all", "featured"] },
-    { "id": "minesweeper", "title": "Minesweeper", "url": "games/minesweeper/index.html", "thumbnail": "games/minesweeper/thumbnail.png", "tags": ["all"] },
-    { "id": "motox3m", "title": "Moto X3M", "url": "games/motox3m/index.html", "thumbnail": "games/motox3m/thumbnail.png", "tags": ["all"] },
-    { "id": "motox3m2", "title": "Moto X3M 2", "url": "games/motox3m2/index.html", "thumbnail": "games/motox3m2/thumbnail.png", "tags": ["all"] },
-    { "id": "pacman", "title": "Pac-Man", "url": "games/pacman/index.html", "thumbnail": "games/pacman/thumbnail.png", "tags": ["all"] },
-    { "id": "avoid-the-blocks", "title": "Avoid the Blocks", "url": "games/avoid-the-blocks/index.html", "thumbnail": "games/avoid-the-blocks/thumbnail.png", "tags": ["all", "arcadio"] },
-    { "id": "avoid-the-blocks-2", "title": "Avoid the Blocks 2", "url": "games/avoid-the-blocks-2/index.html", "thumbnail": "games/avoid-the-blocks-2/thumbnail.png", "tags": ["all", "arcadio"] },
-    { "id": "five-nights-at-freddys", "title": "Five Nights at Freddy's", "url": "games/five-nights-at-freddys/index.html", "tags": ["all"] },
-    { "id": "five-nights-at-freddys-2", "title": "Five Nights at Freddy's 2", "url": "games/five-nights-at-freddys-2/index.html", "tags": ["all"] },
-    { "id": "five-nights-at-freddys-3", "title": "Five Nights at Freddy's 3", "url": "games/five-nights-at-freddys-3/index.html", "tags": ["all"] },
-    { "id": "crossy-road", "title": "Crossy Road", "url": "games/crossy-road/index.html", "tags": ["all"] },
-    { "id": "stack-ball", "title": "Stack Ball", "url": "games/stack-ball/index.html", "tags": ["all"] },
-    { "id": "subway-surfers", "title": "Subway Surfers", "url": "games/subway-surfers/index.html", "tags": ["all"] },
-    { "id": "slope-2", "title": "Slope 2", "url": "games/slope-2/index.html", "tags": ["all"] },
-    { "id": "tomb-of-the-mask", "title": "Tomb of the Mask", "url": "games/tomb-of-the-mask/index.html", "tags": ["all"] }
+    {
+      "id": "2048",
+      "title": "2048",
+      "url": "games/2048/index.html",
+      "tags": [
+        "puzzle",
+        "classic",
+        "all"
+      ],
+      "thumbnail": "games/2048/favicon.ico"
+    },
+    {
+      "id": "adarkroom",
+      "title": "A Dark Room",
+      "url": "games/adarkroom/index.html",
+      "tags": [
+        "idle",
+        "adventure",
+        "simulation",
+        "all"
+      ],
+      "thumbnail": "newicons/a dark room.webp"
+    },
+    {
+      "id": "asciispace",
+      "title": "ASCII Space",
+      "url": "games/asciispace/index.html",
+      "tags": [
+        "shooter",
+        "arcade",
+        "retro",
+        "all"
+      ],
+      "thumbnail": "newicons/ascii space.png"
+    },
+    {
+      "id": "asteroids",
+      "title": "Asteroids",
+      "url": "games/asteroids/index.html",
+      "tags": [
+        "classic",
+        "shooter",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "newicons/asteroids.png"
+    },
+    {
+      "id": "astray",
+      "title": "Astray",
+      "url": "games/astray/index.html",
+      "tags": [
+        "horror",
+        "adventure",
+        "puzzle",
+        "all"
+      ],
+      "thumbnail": "games/astray/ball.png"
+    },
+    {
+      "id": "avoid-the-blocks",
+      "title": "Avoid the Blocks",
+      "url": "games/avoid-the-blocks/index.html",
+      "thumbnail": "games/avoid-the-blocks/thumbnail.png",
+      "tags": [
+        "arcade",
+        "casual",
+        "arcadio",
+        "all"
+      ]
+    },
+    {
+      "id": "avoid-the-blocks-2",
+      "title": "Avoid the Blocks 2",
+      "url": "games/avoid-the-blocks-2/index.html",
+      "thumbnail": "games/avoid-the-blocks-2/thumbnail.png",
+      "tags": [
+        "arcade",
+        "casual",
+        "arcadio",
+        "all"
+      ]
+    },
+    {
+      "id": "backcountry",
+      "title": "Backcountry",
+      "url": "games/backcountry/index.html",
+      "tags": [
+        "adventure",
+        "simulation",
+        "all"
+      ],
+      "thumbnail": "newicons/backcountry.png"
+    },
+    {
+      "id": "baldisbasics",
+      "title": "Baldi's Basics",
+      "url": "games/baldisbasics/index.html",
+      "tags": [
+        "horror",
+        "adventure",
+        "all"
+      ],
+      "thumbnail": "games/baldisbasics/splash.png"
+    },
+    {
+      "id": "basketballlegends",
+      "title": "Basketball Legends",
+      "url": "games/basketballlegends/index.html",
+      "tags": [
+        "sports",
+        "multiplayer",
+        "all"
+      ],
+      "thumbnail": "newicons/basketballl legends.png"
+    },
+    {
+      "id": "basketballstars",
+      "title": "Basketball Stars",
+      "url": "games/basketballstars/index.html",
+      "tags": [
+        "sports",
+        "multiplayer",
+        "all"
+      ],
+      "thumbnail": "newicons/basketball stars.webp"
+    },
+    {
+      "id": "basketbrosio",
+      "title": "BasketBros.io",
+      "url": "games/basketbrosio/index.html",
+      "tags": [
+        "sports",
+        "multiplayer",
+        "all"
+      ],
+      "thumbnail": "games/basketbrosio/favicon.png"
+    },
+    {
+      "id": "basketrandom",
+      "title": "Basket Random",
+      "url": "games/basketrandom/index.html",
+      "tags": [
+        "sports",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/basket random.webp"
+    },
+    {
+      "id": "bitlife",
+      "title": "BitLife",
+      "url": "games/bitlife/index.html",
+      "tags": [
+        "simulation",
+        "idle",
+        "all"
+      ],
+      "thumbnail": "games/bitlife/logo.png"
+    },
+    {
+      "id": "blackholesquare",
+      "title": "Black Hole Square",
+      "url": "games/blackholesquare/index.html",
+      "tags": [
+        "puzzle",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/black hole square.jpg"
+    },
+    {
+      "id": "bounceback",
+      "title": "Bounce Back",
+      "url": "games/bounceback/index.html",
+      "tags": [
+        "arcade",
+        "puzzle",
+        "all"
+      ],
+      "thumbnail": "games/bounceback/screenshot.png"
+    },
+    {
+      "id": "boxingrandom",
+      "title": "Boxing Random",
+      "url": "games/boxingrandom/index.html",
+      "tags": [
+        "sports",
+        "fighting",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "games/boxingrandom/512x340.jpg"
+    },
+    {
+      "id": "breaklock",
+      "title": "Breaklock",
+      "url": "games/breaklock/index.html",
+      "tags": [
+        "puzzle",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/breaklock.webp"
+    },
+    {
+      "id": "breakout",
+      "title": "Breakout",
+      "url": "games/breakout/index.html",
+      "tags": [
+        "classic",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "newicons/breakout.png"
+    },
+    {
+      "id": "btd4",
+      "title": "Bloons TD 4",
+      "url": "games/btd4/index.html",
+      "tags": [
+        "strategy",
+        "tower-defense",
+        "all"
+      ],
+      "thumbnail": "newicons/bloons td 4.png"
+    },
+    {
+      "id": "captaincallisto",
+      "title": "Captain Callisto",
+      "url": "games/captaincallisto/index.html",
+      "tags": [
+        "shooter",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "newicons/captain callisto.png"
+    },
+    {
+      "id": "chess",
+      "title": "Chess",
+      "url": "games/chess/index.html",
+      "tags": [
+        "classic",
+        "strategy",
+        "puzzle",
+        "all"
+      ],
+      "thumbnail": "newicons/chess.png"
+    },
+    {
+      "id": "chromaincident",
+      "title": "The Chroma Incident",
+      "url": "games/chromaincident/index.html",
+      "tags": [
+        "shooter",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "newicons/chroma incident.png"
+    },
+    {
+      "id": "chromedino",
+      "title": "Chrome Dino",
+      "url": "games/chromedino/index.html",
+      "tags": [
+        "classic",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "newicons/chrome dino.png"
+    },
+    {
+      "id": "clickerheroes",
+      "title": "Clicker Heroes",
+      "url": "games/clickerheroes/index.html",
+      "tags": [
+        "idle",
+        "rpg",
+        "all"
+      ],
+      "thumbnail": "newicons/clicker heroes.jpg"
+    },
+    {
+      "id": "clusterrush",
+      "title": "Cluster Rush",
+      "url": "games/clusterrush/index.html",
+      "tags": [
+        "arcade",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/cluster rush.jpg"
+    },
+    {
+      "id": "connect3",
+      "title": "Connect 3",
+      "url": "games/connect3/index.html",
+      "tags": [
+        "puzzle",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/connect 3.png"
+    },
+    {
+      "id": "cookie-clicker",
+      "title": "Cookie Clicker",
+      "url": "games/cookie-clicker/index.html",
+      "tags": [
+        "idle",
+        "clicker",
+        "all"
+      ],
+      "thumbnail": "newicons/cookie clicker.jpg"
+    },
+    {
+      "id": "crossy-road-space",
+      "title": "Crossy Road Space",
+      "url": "games/crossy-road-space/index.html",
+      "thumbnail": "games/crossy-road-space/thumbnail.png",
+      "tags": [
+        "arcade",
+        "casual",
+        "all"
+      ]
+    },
+    {
+      "id": "crossyroad",
+      "title": "Crossy Road",
+      "url": "games/crossyroad/index.html",
+      "tags": [
+        "arcade",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/crossy road.png"
+    },
+    {
+      "id": "csgoclicker",
+      "title": "CSGO Clicker",
+      "url": "games/csgoclicker/index.html",
+      "tags": [
+        "idle",
+        "clicker",
+        "all"
+      ],
+      "thumbnail": "newicons/csgo clicker.png"
+    },
+    {
+      "id": "cubefield",
+      "title": "Cube Field",
+      "url": "games/cubefield/index.html",
+      "tags": [
+        "shooter",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "newicons/cubefield.png"
+    },
+    {
+      "id": "cubitomayhem",
+      "title": "Cubito Mayhem",
+      "url": "games/cubitomayhem/index.html",
+      "tags": [
+        "action",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "newicons/cubito mayhem.png"
+    },
+    {
+      "id": "cuttherope",
+      "title": "Cut the Rope",
+      "url": "games/cuttherope/index.html",
+      "tags": [
+        "puzzle",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/cut the rope.png"
+    },
+    {
+      "id": "cuttheropeholiday",
+      "title": "Cut the Rope Holiday",
+      "url": "games/cuttheropeholiday/index.html",
+      "tags": [
+        "puzzle",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/cut the rope holiday.png"
+    },
+    {
+      "id": "cuttheropetimetravel",
+      "title": "Cut the Rope Time Travel",
+      "url": "games/cuttheropetimetravel/index.html",
+      "tags": [
+        "puzzle",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/cut the rope time travel.webp"
+    },
+    {
+      "id": "deathrun3d",
+      "title": "Death Run 3D",
+      "url": "games/deathrun3d/index.html",
+      "tags": [
+        "action",
+        "racing",
+        "platformer",
+        "all"
+      ],
+      "thumbnail": "newicons/death run 3d.jpg"
+    },
+    {
+      "id": "deepestsword",
+      "title": "Deepest Sword",
+      "url": "games/deepestsword/index.html",
+      "tags": [
+        "platformer",
+        "action",
+        "all"
+      ],
+      "thumbnail": "newicons/deepest sword.jpg"
+    },
+    {
+      "id": "doodlejump",
+      "title": "Doodle Jump",
+      "url": "games/doodlejump/index.html",
+      "tags": [
+        "arcade",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/doodle jump.jpg"
+    },
+    {
+      "id": "doom",
+      "title": "Doom",
+      "url": "games/doom/index.html",
+      "tags": [
+        "classic",
+        "shooter",
+        "retro",
+        "all"
+      ],
+      "thumbnail": "newicons/doom.png"
+    },
+    {
+      "id": "drift",
+      "title": "Drift",
+      "url": "games/drift/index.html",
+      "tags": [
+        "racing",
+        "car",
+        "all"
+      ],
+      "thumbnail": "newicons/drift.jpg"
+    },
+    {
+      "id": "drifthunters",
+      "title": "Drift Hunters",
+      "url": "games/drifthunters/index.html",
+      "tags": [
+        "racing",
+        "car",
+        "all"
+      ],
+      "thumbnail": "newicons/drift hunters.jpg"
+    },
+    {
+      "id": "drivemad",
+      "title": "Drive Mad",
+      "url": "games/drivemad/index.html",
+      "tags": [
+        "racing",
+        "driving",
+        "car",
+        "all"
+      ],
+      "thumbnail": "newicons/drive mad.jpg"
+    },
+    {
+      "id": "ducklife",
+      "title": "Duck Life",
+      "url": "games/ducklife/index.html",
+      "tags": [
+        "simulation",
+        "strategy",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/duck life.jpg"
+    },
+    {
+      "id": "ducklife2",
+      "title": "Duck Life 2",
+      "url": "games/ducklife2/index.html",
+      "tags": [
+        "simulation",
+        "strategy",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/duck life 2.png"
+    },
+    {
+      "id": "ducklife3",
+      "title": "Duck Life 3",
+      "url": "games/ducklife3/index.html",
+      "tags": [
+        "simulation",
+        "strategy",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/duck life 3.jpg"
+    },
+    {
+      "id": "ducklife4",
+      "title": "Duck Life 4",
+      "url": "games/ducklife4/index.html",
+      "tags": [
+        "simulation",
+        "strategy",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/duck life 4.png"
+    },
+    {
+      "id": "ducklife5",
+      "title": "Duck Life 5",
+      "url": "games/ducklife5/index.html",
+      "tags": [
+        "simulation",
+        "strategy",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/duck life 5.jpg"
+    },
+    {
+      "id": "earntodie",
+      "title": "Earn to Die",
+      "url": "games/earntodie/index.html",
+      "tags": [
+        "racing",
+        "action",
+        "car",
+        "all"
+      ],
+      "thumbnail": "newicons/earn to die.jpg"
+    },
+    {
+      "id": "edgenotfound",
+      "title": "Edge Not Found",
+      "url": "games/edgenotfound/index.html",
+      "tags": [
+        "puzzle",
+        "platformer",
+        "all"
+      ],
+      "thumbnail": "newicons/edge not found.png"
+    },
+    {
+      "id": "eggycar",
+      "title": "Eggy Car",
+      "url": "games/eggycar/index.html",
+      "tags": [
+        "racing",
+        "car",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "games/eggycar/logo.png"
+    },
+    {
+      "id": "evilglitch",
+      "title": "Evil Glitch",
+      "url": "games/evilglitch/index.html",
+      "tags": [
+        "arcade",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/evil glitch.jpg"
+    },
+    {
+      "id": "factoryballsforever",
+      "title": "Factory Balls Forever",
+      "url": "games/factoryballsforever/index.html",
+      "tags": [
+        "puzzle",
+        "all"
+      ],
+      "thumbnail": "newicons/factory balls forever.jpg"
+    },
+    {
+      "id": "fireboyandwatergirlforesttemple",
+      "title": "Fireboy and Watergirl Forest Temple",
+      "url": "games/fireboyandwatergirlforesttemple/index.html",
+      "tags": [
+        "puzzle",
+        "platformer",
+        "multiplayer",
+        "all"
+      ],
+      "thumbnail": "newicons/fireboy and watergirl forest temple.png"
+    },
+    {
+      "id": "flappy2048",
+      "title": "Flappy 2048",
+      "url": "games/flappy2048/index.html",
+      "tags": [
+        "arcade",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/flappy 2048.jpg"
+    },
+    {
+      "id": "flappybird",
+      "title": "Flappy Bird",
+      "url": "games/flappybird/index.html",
+      "tags": [
+        "classic",
+        "arcade",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/flappy bird.jpg"
+    },
+    {
+      "id": "flightsimulator",
+      "title": "Flight Simulator",
+      "url": "games/flightsimulator/index.html",
+      "tags": [
+        "simulation",
+        "flying",
+        "all"
+      ],
+      "thumbnail": "newicons/flight simulator.jpg"
+    },
+    {
+      "id": "fridaynightfunkin",
+      "title": "Friday Night Funkin'",
+      "url": "games/fridaynightfunkin/index.html",
+      "tags": [
+        "rhythm",
+        "classic",
+        "all"
+      ],
+      "thumbnail": "games/fridaynightfunkin/favicon.png"
+    },
+    {
+      "id": "friendlyfire",
+      "title": "Friendly Fire",
+      "url": "games/friendlyfire/index.html",
+      "tags": [
+        "shooter",
+        "multiplayer",
+        "all"
+      ],
+      "thumbnail": "newicons/friendly fire.png"
+    },
+    {
+      "id": "gladihoppers",
+      "title": "Gladihoppers",
+      "url": "games/gladihoppers/index.html",
+      "tags": [
+        "action",
+        "multiplayer",
+        "all"
+      ],
+      "thumbnail": "newicons/gladihoppers.jpg"
+    },
+    {
+      "id": "googlesnake",
+      "title": "Google Snake",
+      "url": "games/googlesnake/index.html",
+      "tags": [
+        "classic",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/google snake.png"
+    },
+    {
+      "id": "gopherkart",
+      "title": "Gopher Kart",
+      "url": "games/gopherkart/index.html",
+      "tags": [
+        "racing",
+        "multiplayer",
+        "all"
+      ],
+      "thumbnail": "newicons/gopher kart.webp"
+    },
+    {
+      "id": "hexgl",
+      "title": "HexGL",
+      "url": "games/hexgl/index.html",
+      "tags": [
+        "racing",
+        "car",
+        "simulation",
+        "all"
+      ],
+      "thumbnail": "newicons/hexgl.jpg"
+    },
+    {
+      "id": "hextris",
+      "title": "Hextris",
+      "url": "games/hextris/index.html",
+      "tags": [
+        "puzzle",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "newicons/hextris.jpg"
+    },
+    {
+      "id": "highwaytraffic",
+      "title": "Highway Traffic",
+      "url": "games/highwaytraffic/index.html",
+      "tags": [
+        "racing",
+        "simulation",
+        "all"
+      ],
+      "thumbnail": "newicons/highway traffic.jpg"
+    },
+    {
+      "id": "konnekt",
+      "title": "Konnekt",
+      "url": "games/konnekt/index.html",
+      "tags": [
+        "puzzle",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/konnekt.png"
+    },
+    {
+      "id": "learntofly",
+      "title": "Learn to Fly",
+      "url": "games/learntofly/2/index.html",
+      "tags": [
+        "simulation",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/learn to fly.png"
+    },
+    {
+      "id": "letssurf",
+      "title": "Let's Surf",
+      "url": "games/letssurf/index.html",
+      "tags": [
+        "simulation",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/lets surf.png"
+    },
+    {
+      "id": "mergeroundracers",
+      "title": "Merge Round Racers",
+      "url": "games/mergeroundracers/index.html",
+      "tags": [
+        "puzzle",
+        "racing",
+        "all"
+      ],
+      "thumbnail": "games/mergeroundracers/splash.png"
+    },
+    {
+      "id": "minecraft-1.12.2",
+      "title": "Minecraft 1.12.2",
+      "url": "games/minecraft-1.12.2/index.html",
+      "thumbnail": "games/minecraft-1.12.2/thumbnail.png",
+      "tags": [
+        "sandbox",
+        "adventure",
+        "classic",
+        "all"
+      ]
+    },
+    {
+      "id": "minecraft-1.8",
+      "title": "Minecraft 1.8",
+      "url": "games/minecraft-1.8/index.html",
+      "thumbnail": "games/minecraft-1.8/thumbnail.png",
+      "tags": [
+        "sandbox",
+        "adventure",
+        "classic",
+        "all"
+      ]
+    },
+    {
+      "id": "minesweeper",
+      "title": "Minesweeper",
+      "url": "games/minesweeper/index.html",
+      "thumbnail": "games/minesweeper/thumbnail.png",
+      "tags": [
+        "puzzle",
+        "classic",
+        "all"
+      ]
+    },
+    {
+      "id": "monkeymart",
+      "title": "Monkey Mart",
+      "url": "games/monkeymart/index.html",
+      "tags": [
+        "idle",
+        "simulation",
+        "clicker",
+        "all"
+      ],
+      "thumbnail": "games/monkeymart/back-home.png"
+    },
+    {
+      "id": "motoroadrash3d",
+      "title": "Moto Road Rash 3D",
+      "url": "games/motoroadrash3d/index.html",
+      "tags": [
+        "racing",
+        "action",
+        "car",
+        "all"
+      ],
+      "thumbnail": "newicons/moto road rash 3d.png"
+    },
+    {
+      "id": "motox3m",
+      "title": "Moto X3M",
+      "url": "games/motox3m/index.html",
+      "thumbnail": "games/motox3m/splash.jpg",
+      "tags": [
+        "racing",
+        "sports",
+        "bike",
+        "all"
+      ]
+    },
+    {
+      "id": "motox3m2",
+      "title": "Moto X3M 2",
+      "url": "games/motox3m2/index.html",
+      "thumbnail": "games/motox3m2/thumbnail.png",
+      "tags": [
+        "racing",
+        "sports",
+        "bike",
+        "all"
+      ]
+    },
+    {
+      "id": "ninjavsevilcorp",
+      "title": "Ninja vs Evil Corp",
+      "url": "games/ninjavsevilcorp/index.html",
+      "tags": [
+        "action",
+        "platformer",
+        "shooter",
+        "all"
+      ],
+      "thumbnail": "newicons/ninja vs evil corp.png"
+    },
+    {
+      "id": "omnombounce",
+      "title": "Om Nom Bounce",
+      "url": "games/omnombounce/index.html",
+      "tags": [
+        "puzzle",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "newicons/om nom bounce.jpg"
+    },
+    {
+      "id": "packabunchas",
+      "title": "Pac a Bunchas",
+      "url": "games/packabunchas/index.html",
+      "tags": [
+        "classic",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "newicons/packa bunchas.png"
+    },
+    {
+      "id": "pacman",
+      "title": "Pac-Man",
+      "url": "games/pacman/index.html",
+      "thumbnail": "newicons/pacman.jpg",
+      "tags": [
+        "classic",
+        "arcade",
+        "all"
+      ]
+    },
+    {
+      "id": "paperio",
+      "title": "Paper.io",
+      "url": "games/paperio/index.html",
+      "tags": [
+        "io",
+        "multiplayer",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/paper.io.jpg"
+    },
+    {
+      "id": "particleclicker",
+      "title": "Particle Clicker",
+      "url": "games/particleclicker/index.html",
+      "tags": [
+        "idle",
+        "clicker",
+        "all"
+      ],
+      "thumbnail": "newicons/particle clicker.webp"
+    },
+    {
+      "id": "pushback",
+      "title": "Pushback",
+      "url": "games/pushback/index.html",
+      "tags": [
+        "puzzle",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/pushback.jpg"
+    },
+    {
+      "id": "q1k3",
+      "title": "Q1K3",
+      "url": "games/q1k3/index.html",
+      "tags": [
+        "shooter",
+        "arcade",
+        "retro",
+        "all"
+      ],
+      "thumbnail": "newicons/q1k3.png"
+    },
+    {
+      "id": "r3",
+      "title": "Run 3",
+      "url": "games/r3/index.html",
+      "tags": [
+        "racing",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "games/r3/favicon.png"
+    },
+    {
+      "id": "racer",
+      "title": "Racer",
+      "url": "games/racer/index.html",
+      "tags": [
+        "racing",
+        "car",
+        "all"
+      ],
+      "thumbnail": "newicons/racer.png"
+    },
+    {
+      "id": "radiusraid",
+      "title": "Radius Raid",
+      "url": "games/radiusraid/index.html",
+      "tags": [
+        "shooter",
+        "classic",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "newicons/radius raid.jpg"
+    },
+    {
+      "id": "redball4",
+      "title": "Red Ball 4",
+      "url": "games/redball4/index.html",
+      "tags": [
+        "platformer",
+        "puzzle",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/red ball 4.png"
+    },
+    {
+      "id": "retrobowl",
+      "title": "Retro Bowl",
+      "url": "games/retrobowl/index.html",
+      "tags": [
+        "sports",
+        "classic",
+        "retro",
+        "all"
+      ],
+      "thumbnail": "newicons/retro bowl.webp"
+    },
+    {
+      "id": "retrohaunt",
+      "title": "Retro Haunt",
+      "url": "games/retrohaunt/index.html",
+      "tags": [
+        "horror",
+        "adventure",
+        "all"
+      ],
+      "thumbnail": "newicons/retro haunt.webp"
+    },
+    {
+      "id": "riddleschool2",
+      "title": "Riddle School 2",
+      "url": "games/riddleschool2/index.html",
+      "tags": [
+        "adventure",
+        "puzzle",
+        "classic",
+        "all"
+      ],
+      "thumbnail": "newicons/riddle school 2.webp"
+    },
+    {
+      "id": "ritz",
+      "title": "Ritz",
+      "url": "games/ritz/index.html",
+      "tags": [
+        "puzzle",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "games/ritz/favicon.png"
+    },
+    {
+      "id": "roadblocks",
+      "title": "Road Blocks",
+      "url": "games/roadblocks/index.html",
+      "tags": [
+        "puzzle",
+        "classic",
+        "all"
+      ],
+      "thumbnail": "newicons/road blocks.jpg"
+    },
+    {
+      "id": "rooftopsnipers",
+      "title": "Rooftop Snipers",
+      "url": "games/rooftopsnipers/index.html",
+      "tags": [
+        "shooter",
+        "action",
+        "all"
+      ],
+      "thumbnail": "newicons/rooftop snipers.png"
+    },
+    {
+      "id": "run3",
+      "title": "Run 3",
+      "url": "games/run3/index.html",
+      "tags": [
+        "runner",
+        "platformer",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "games/run3/favicon.png"
+    },
+    {
+      "id": "scrapmetal3",
+      "title": "Scrap Metal 3",
+      "url": "games/scrapmetal3/index.html",
+      "tags": [
+        "action",
+        "fighting",
+        "all"
+      ],
+      "thumbnail": "newicons/scrap metal 3.jpg"
+    },
+    {
+      "id": "shuttledeck",
+      "title": "Shuttle Deck",
+      "url": "games/shuttledeck/index.html",
+      "tags": [
+        "simulation",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/shuttle deck.webp"
+    },
+    {
+      "id": "sketchbook04",
+      "title": "Sketchbook 04",
+      "url": "games/sketchbook04/index.html",
+      "tags": [
+        "puzzle",
+        "drawing",
+        "all"
+      ],
+      "thumbnail": "newicons/sketchbook 04.png"
+    },
+    {
+      "id": "sleepingbeauty",
+      "title": "Sleeping Beauty",
+      "url": "games/sleepingbeauty/index.html",
+      "tags": [
+        "puzzle",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/sleeping beauty.png"
+    },
+    {
+      "id": "slitherio",
+      "title": "Slither.io",
+      "url": "games/slitherio/index.html",
+      "tags": [
+        "io",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/slither.io.png"
+    },
+    {
+      "id": "slope",
+      "title": "Slope",
+      "url": "games/slope/index.html",
+      "thumbnail": "games/slope/slope4.jpeg",
+      "tags": [
+        "racing",
+        "arcade",
+        "casual",
+        "all"
+      ]
+    },
+    {
+      "id": "slope2",
+      "title": "Slope 2",
+      "url": "games/slope2/index.html",
+      "tags": [
+        "racing",
+        "arcade",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/slope 2.jpg"
+    },
+    {
+      "id": "snake",
+      "title": "Snake",
+      "url": "games/snake/index.html",
+      "tags": [
+        "classic",
+        "arcade",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/snake.png"
+    },
+    {
+      "id": "snowbattle",
+      "title": "Snow Battle",
+      "url": "games/snowbattle/index.html",
+      "tags": [
+        "strategy",
+        "multiplayer",
+        "all"
+      ],
+      "thumbnail": "newicons/snow battle.jpg"
+    },
+    {
+      "id": "spacecompany",
+      "title": "Space Company",
+      "url": "games/spacecompany/index.html",
+      "tags": [
+        "idle",
+        "simulation",
+        "strategy",
+        "all"
+      ],
+      "thumbnail": "games/spacecompany/whiteLogo.png"
+    },
+    {
+      "id": "spacegarden",
+      "title": "Space Garden",
+      "url": "games/spacegarden/index.html",
+      "tags": [
+        "idle",
+        "simulation",
+        "all"
+      ],
+      "thumbnail": "newicons/space garden.png"
+    },
+    {
+      "id": "spacehuggers",
+      "title": "Space Huggers",
+      "url": "games/spacehuggers/index.html",
+      "tags": [
+        "shooter",
+        "arcade",
+        "co-op",
+        "all"
+      ],
+      "thumbnail": "newicons/space huggers.png"
+    },
+    {
+      "id": "spaceinvaders",
+      "title": "Space Invaders",
+      "url": "games/spaceinvaders/index.html",
+      "tags": [
+        "classic",
+        "shooter",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "newicons/space invaders.png"
+    },
+    {
+      "id": "stack",
+      "title": "Stack",
+      "url": "games/stack/index.html",
+      "tags": [
+        "arcade",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "games/stack/stack.png"
+    },
+    {
+      "id": "stickmanboost",
+      "title": "Stickman Boost",
+      "url": "games/stickmanboost/index.html",
+      "tags": [
+        "platformer",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "games/stickmanboost/icon-256.png"
+    },
+    {
+      "id": "stickmanhook",
+      "title": "Stickman Hook",
+      "url": "games/stickmanhook/index.html",
+      "tags": [
+        "platformer",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "games/stickmanhook/unnamed.jpg"
+    },
+    {
+      "id": "stickmansurvival",
+      "title": "Stickman Survival",
+      "url": "games/stickmansurvival/index.html",
+      "tags": [
+        "survival",
+        "action",
+        "all"
+      ],
+      "thumbnail": "games/stickmansurvival/Icon.png"
+    },
+    {
+      "id": "subwaysurfers",
+      "title": "Subway Surfers",
+      "url": "games/subwaysurfers/index.html",
+      "tags": [
+        "runner",
+        "arcade",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/subway surfers.png"
+    },
+    {
+      "id": "subwaysurfersny",
+      "title": "Subway Surfers NY",
+      "url": "games/subwaysurfersny/index.html",
+      "tags": [
+        "runner",
+        "arcade",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "games/subwaysurfersny/NewYorkIcon.png"
+    },
+    {
+      "id": "subwaysurferssingapore",
+      "title": "Subway Surfers Singapore",
+      "url": "games/subwaysurferssingapore/index.html",
+      "tags": [
+        "runner",
+        "arcade",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/subway surfers singapore.webp"
+    },
+    {
+      "id": "tanukisunset",
+      "title": "Tanuki Sunset",
+      "url": "games/tanukisunset/index.html",
+      "tags": [
+        "racing",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "newicons/tanuki sunset.jpg"
+    },
+    {
+      "id": "tetris",
+      "title": "Tetris",
+      "url": "games/tetris/index.html",
+      "tags": [
+        "classic",
+        "puzzle",
+        "arcade",
+        "all"
+      ],
+      "thumbnail": "newicons/tetris.png"
+    },
+    {
+      "id": "themazeofspacegoblins",
+      "title": "The Maze of Space Goblins",
+      "url": "games/themazeofspacegoblins/index.html",
+      "tags": [
+        "action",
+        "adventure",
+        "all"
+      ],
+      "thumbnail": "newicons/the maze of space goblins.jpg"
+    },
+    {
+      "id": "timeshooter",
+      "title": "Time Shooter",
+      "url": "games/timeshooter/index.html",
+      "tags": [
+        "shooter",
+        "action",
+        "all"
+      ],
+      "thumbnail": "newicons/time shooter 1.webp"
+    },
+    {
+      "id": "timeshooter2",
+      "title": "Time Shooter 2",
+      "url": "games/timeshooter2/index.html",
+      "tags": [
+        "shooter",
+        "action",
+        "all"
+      ],
+      "thumbnail": "newicons/time shooter 2.webp"
+    },
+    {
+      "id": "timeshooter3",
+      "title": "Time Shooter 3",
+      "url": "games/timeshooter3/index.html",
+      "tags": [
+        "shooter",
+        "action",
+        "all"
+      ],
+      "thumbnail": "newicons/time shooter 3.jpg"
+    },
+    {
+      "id": "tinyfishing",
+      "title": "Tiny Fishing",
+      "url": "games/tinyfishing/index.html",
+      "tags": [
+        "simulation",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "games/tinyfishing/thumb.png"
+    },
+    {
+      "id": "tombofthemask",
+      "title": "Tomb of the Mask",
+      "url": "games/tombofthemask/index.html",
+      "tags": [
+        "puzzle",
+        "arcade",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/tomb of the mask.webp"
+    },
+    {
+      "id": "topspeedracing3d",
+      "title": "Top Speed Racing 3D",
+      "url": "games/topspeedracing3d/index.html",
+      "tags": [
+        "racing",
+        "car",
+        "all"
+      ],
+      "thumbnail": "newicons/top speed racing 3d.jpg"
+    },
+    {
+      "id": "towermaster",
+      "title": "Tower Master",
+      "url": "games/towermaster/index.html",
+      "tags": [
+        "strategy",
+        "tower-defense",
+        "all"
+      ],
+      "thumbnail": "newicons/tower master.webp"
+    },
+    {
+      "id": "trimps",
+      "title": "Trimps",
+      "url": "games/trimps/index.html",
+      "tags": [
+        "idle",
+        "clicker",
+        "strategy",
+        "all"
+      ],
+      "thumbnail": "newicons/trimps.png"
+    },
+    {
+      "id": "tunnelrush",
+      "title": "Tunnel Rush",
+      "url": "games/tunnelrush/index.html",
+      "tags": [
+        "arcade",
+        "casual",
+        "rhythm",
+        "all"
+      ],
+      "thumbnail": "newicons/tunnel rush.jpg"
+    },
+    {
+      "id": "vex3",
+      "title": "Vex 3",
+      "url": "games/vex3/index.html",
+      "tags": [
+        "platformer",
+        "action",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "games/vex3/762c932b4db74c6da0c1d101b2da8be6-512x512.jpeg"
+    },
+    {
+      "id": "vex4",
+      "title": "Vex 4",
+      "url": "games/vex4/index.html",
+      "tags": [
+        "platformer",
+        "action",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "games/vex4/80e6a5ae477f4d4fbcd1ea293d10087d-512x512.jpeg"
+    },
+    {
+      "id": "vex5",
+      "title": "Vex 5",
+      "url": "games/vex5/index.html",
+      "tags": [
+        "platformer",
+        "action",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "games/vex5/f120262ab72743039fbce88c1f370df8-512x512.jpeg"
+    },
+    {
+      "id": "vex6",
+      "title": "Vex 6",
+      "url": "games/vex6/index.html",
+      "tags": [
+        "platformer",
+        "action",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/vex 6.jpg"
+    },
+    {
+      "id": "webecomewhatwebehold",
+      "title": "We Become What We Behold",
+      "url": "games/webecomewhatwebehold/index.html",
+      "tags": [
+        "simulation",
+        "casual",
+        "adventure",
+        "all"
+      ],
+      "thumbnail": "newicons/we become what we behold.jpg"
+    },
+    {
+      "id": "worldshardestgame2",
+      "title": "World's Hardest Game 2",
+      "url": "games/worldshardestgame2/index.html",
+      "tags": [
+        "puzzle",
+        "platformer",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "games/worldshardestgame2/the-worlds-hardest-game-2.jpg"
+    },
+    {
+      "id": "xx142b2exe",
+      "title": "xx142-b2.exe",
+      "url": "games/xx142b2exe/index.html",
+      "tags": [
+        "puzzle",
+        "arcade",
+        "retro",
+        "all"
+      ],
+      "thumbnail": "newicons/xx142-b2.exe.png"
+    },
+    {
+      "id": "zombsroyale",
+      "title": "Zombs Royale",
+      "url": "games/zombsroyale/index.html",
+      "tags": [
+        "io",
+        "shooter",
+        "multiplayer",
+        "all"
+      ],
+      "thumbnail": "games/zombsroyale/zomb.png"
+    }
   ]
 }
