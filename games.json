@@ -1538,6 +1538,29 @@
         "all"
       ],
       "thumbnail": "games/zombsroyale/zomb.png"
+    },
+    {
+      "id": "slide-down",
+      "title": "Slide Down",
+      "url": "games/slide-down/index.html",
+      "tags": [
+        "arcade",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "games/slide-down/favicon.png"
+    },
+    {
+      "id": "slice-master",
+      "title": "Slice Master",
+      "url": "games/slice-master-standalone/index.html",
+      "tags": [
+        "arcade",
+        "casual",
+        "action",
+        "all"
+      ],
+      "thumbnail": "games/slice-master-standalone/thumbnail.jpg"
     }
   ]
 }
