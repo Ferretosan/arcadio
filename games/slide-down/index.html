@@ -241,7 +241,7 @@
  frame_game.setAttribute('scrolling', 'no');
  frame_game.setAttribute('class', 'iframe-default');
  frame_game.setAttribute('allowfullscreen', 'true');
- frame_game.setAttribute('src', 'https://gamea.azgame.io/slide-down/');
+ frame_game.setAttribute('src', 'game.html');
 						frame_game.setAttribute('allow','autoplay; fullscreen; camera; focus-without-user-activation *; monetization; gamepad; keyboard-map *; xr-spatial-tracking; clipboard-write; web-share; accelerometer; magnetometer; gyroscope; display-capture');
  if (document.getElementById("preloading-game")) {
  await document.getElementById("preloading-game").remove();
@@ -270,7 +270,7 @@
 						
 						window.parent.postMessage({
 							type: 'ga_embed_play_clicked',
-							game_url: 'https://gamea.azgame.io/slide-down/'
+							game_url: 'game.html'
 						}, '*');
 						
  }</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"837656782fe14e4e99a70e0780695320","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>

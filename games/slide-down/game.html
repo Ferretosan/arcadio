@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" href="26010801/theme/game.css">
+	<meta name="robots" content="noindex, nofollow">
+	<title>Slide Down</title>
+	<style type="text/css">
+		.jss1:before {
+			top: 0;
+			width: 100%;
+			filter: blur(16px);
+			height: 100%;
+			content: "";
+			display: block;
+			opacity: .5;
+			z-index: 0;
+			position: absolute;
+			background-size: cover;
+			background-image: url("26010801/loading.png")
+		}
+	</style>
+	<script>
+		// The game checks Application.absoluteURL against the signed domain token.
+		try {
+			Object.defineProperty(Document.prototype, "URL", {
+				configurable: true,
+				get: function () { return "https://gamea.azgame.io/slide-down/"; }
+			});
+		} catch (e) {}
+	</script>
+	<script>
+		var buildUrl = "Build";
+		var loaderUrl = buildUrl + "/slide-down-v26010801.loader.js";
+		var baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, "");
+		var config = {
+			dataUrl: buildUrl + "/slide-down-v26010801.data.unityweb",
+			frameworkUrl: buildUrl + "/slide-down-v26010801.framework.js.unityweb",
+			codeUrl: buildUrl + "/slide-down-v26010801.wasm.unityweb",
+			streamingAssetsUrl: baseUrl + "26010801/StreamingAssets",
+			companyName: "azgames.io",
+			productName: "Slide Down",
+			productVersion: "26010801"
+		};
+		window["GMSOFT_SDKTYPE"] = "gm";
+		config.gameId = "slide-down";
+		config.eventLog = false;
+	</script>
+	<!-- Marker checked by the Unity framework's anti-tamper script. It must
+	     expose the official SDK URL as .src, but the actual SDK is self-hosted. -->
+	<script type="text/plain" id="gmsoft-jssdk" src="https://api.azgame.io/static/gmsdkv1.js"></script>
+	<script src="gmsdkv1.js"></script>
+</head>
+
+<body>
+<div id="unity-container" style="display: none;">
+	<canvas id="unity-canvas"></canvas>
+</div>
+<div id="loadingBlock" style="">
+	<div class="jss31 jss34 jss1">
+		<div class="spinner"></div>
+		<div class="jss31 jss34 jss48" style="flex: 1 1 0%;">
+			<div class="jss32">
+				<div class="jss7 jss9 jss20 jss3">
+					<div class="jss125">
+						<div class="jss123">
+						 <img src="26010801/logo.png" alt="Slide Down">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="jss31 jss34" style="flex: 3 1 0%;">
+			<div class="jss32">
+				<div class="jss31 jss34 jss39 jss50 gameloader">
+					<div class="jss32">
+						<div class="gameloader-game-name">Slide Down</div>
+					</div>
+					<div class="jss32">
+						<div class="jss32 gameloader-logo">
+							<img id="game-logo" src="26010801/loading.png" alt="Slide Down">
+						</div>
+					</div>
+					<div class="jss32">
+						<div>
+							<div class="gameloader-progressbar">
+								<div class="gameloader-progressbar-progress" id="progress_fill"
+										 style="width: 0%;"></div>
+							</div>
+							<div class="gameloader-progress-info">Game Loading...</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+	<script>
+		var progressElement = document.getElementById('progress_fill');
+		var container =	document.getElementById("unity-container");
+		var canvas =	document.getElementById("unity-canvas");
+		var loadingBar = document.querySelector("#loadingBlock");
+		var progress_text = document.querySelector(".gameloader-progress-info");
+		var script = document.createElement("script");
+		script.src = loaderUrl;
+		script.onload = () => {
+			createUnityInstance(canvas, config, (progress) => {
+				progressElement.style.width = 100 * progress + "%";
+				progress_text.innerText = "Downloading file: " + Math.round(progress*100) + "%";
+				if (progress >= 99) {
+					progress_text.innerText = "Game Loading ...";
+				}
+			}).then((unityInstance) => {
+				window.unityInstance = unityInstance;
+				setTimeout(function() {
+					loadingBar.style.display = "none";
+					window.focus();
+				}, 2000);
+				container.style.display = "block";
+			}).catch((message) => {
+				alert(message);
+			});
+		};
+		document.body.appendChild(script);
+
+		// No-op analytics helpers used by the game build.
+		function firebaseSetUserProperties() {}
+		function firebaseLogEvent() {}
+		function firebaseLogEventParameter() {}
+	</script>
+</body>
+</html>
