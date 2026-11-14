@@ -44,6 +44,12 @@
 			productVersion: "26010801"
 		};
 		window["GMSOFT_SDKTYPE"] = "gm";
+		// Pre-seed the signed domain token the game normally receives from the
+		// azgames host. Without this the SDK locks the game when its own
+		// verification endpoints are unreachable.
+		try {
+			localStorage.setItem("gmsdksigndomain", "eyJzaWduZWQiOiJJaHQ2XC9qdTRUWk15dTljNUhNbWNmekM2QWFmdXFIbGlqOFNcL1ZNNGJxOFVERXZ2czBwc3gwZUZQNEdWSkVWNmVFU2FMaGV1UERNMnEwOVVhUFRLODFJbVpVYnBpTndMXC9wNENcL2R2RWRkanlQK1RyUFFqazNLOUxOM0ZNRDluN0hSXC9ZblAxRmJYTkxoOG0zY3ZLT1JjaWdyXC9Na1JJQnV4SndQaWlvTlFMTVVPbkIzUmZUUkV1czBXbThJK3l4WEdzWUttSVhrT1lGT2hMXC8xb29NNG1hYWswMHZCaFwvZ2J1T09DRDBmZE82K2k3WVFuQUpvQUlBVTNtVXZUc0g4bWN3XC9qUmtTc3E5a2hWdktWVStnem4rZndveVpKWDFWTE00alwvUzZWdVF5SGJoSWEzM0d6U2hjUDZYQXpUUTBIOWpsc2pzNU83aEx4alVkUlcrSDFsZW9RPT0iLCJhcCI6InllcyIsImhuIjoiZ2FtZWEuYXpnYW1lLmlvIiwiZG9tYWluIjoiYXpnYW1lLmlvIiwicyI6InllcyIsInN0eXBlIjoyfQ==");
+		} catch (e) {}
 		config.gameId = "slide-down";
 		config.eventLog = false;
 	</script>
