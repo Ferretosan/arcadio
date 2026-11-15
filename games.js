@@ -83,7 +83,7 @@ function setupSearch(){
 
 function renderSidebar(){
   const tagCounts = {};
-  const exclude = new Set(['all', 'featured', 'arcadio']);
+  const exclude = new Set(['all', 'featured', 'arcadio', 'new']);
   for(const g of (App.data.games || [])){
     if(Array.isArray(g.tags)){
       for(const t of g.tags){

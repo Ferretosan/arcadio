@@ -1,6 +1,10 @@
 {
   "sections": [
     {
+      "title": "New Games",
+      "tag": "new"
+    },
+    {
       "title": "arcadio+ [Originals]",
       "tag": "arcadio"
     },
@@ -19,7 +23,7 @@
         "classic",
         "all"
       ],
-      "thumbnail": "games/2048/favicon.ico"
+      "thumbnail": "newicons/2048.png"
     },
     {
       "id": "adarkroom",
@@ -67,7 +71,7 @@
         "puzzle",
         "all"
       ],
-      "thumbnail": "games/astray/ball.png"
+      "thumbnail": "newicons/astray.png"
     },
     {
       "id": "avoid-the-blocks",
@@ -787,6 +791,7 @@
         "sandbox",
         "adventure",
         "classic",
+        "new",
         "all"
       ]
     },
@@ -823,7 +828,7 @@
         "clicker",
         "all"
       ],
-      "thumbnail": "games/monkeymart/back-home.png"
+      "thumbnail": "newicons/monkey mart.png"
     },
     {
       "id": "motoroadrash3d",
@@ -1190,7 +1195,7 @@
         "strategy",
         "all"
       ],
-      "thumbnail": "games/spacecompany/whiteLogo.png"
+      "thumbnail": "newicons/space company.png"
     },
     {
       "id": "spacegarden",
@@ -1247,7 +1252,7 @@
         "arcade",
         "all"
       ],
-      "thumbnail": "games/stickmanboost/icon-256.png"
+      "thumbnail": "newicons/stickman boost.png"
     },
     {
       "id": "stickmanhook",
@@ -1546,6 +1551,7 @@
       "tags": [
         "arcade",
         "casual",
+        "new",
         "all"
       ],
       "thumbnail": "games/slide-down/favicon.png"
@@ -1558,6 +1564,7 @@
         "arcade",
         "casual",
         "action",
+        "new",
         "all"
       ],
       "thumbnail": "games/slice-master-standalone/thumbnail.jpg"
