@@ -47,8 +47,8 @@ function formatTag(tag){
 
 async function init(){
   try{
-    const res = await fetch('games.json');
-    if(!res.ok) throw new Error('Failed to load games.json');
+    const res = await fetch('games.jsonc');
+    if(!res.ok) throw new Error('Failed to load games.jsonc');
     App.data = await res.json();
     App.sections = App.data.sections || [];
     renderSidebar();
@@ -84,7 +84,7 @@ function setupSearch(){
 function renderSidebar(){
   const tagCounts = {};
   const exclude = new Set(['all', 'featured', 'arcadio', 'new']);
-  for(const g of (App.data.games || [])){
+  for(const g of (App.data.games || []).filter(g => !g.hidden)){
     if(Array.isArray(g.tags)){
       for(const t of g.tags){
         if(!exclude.has(t)){
@@ -207,7 +207,7 @@ function render(){
   const container = document.getElementById('categories');
   container.innerHTML = '';
 
-  const games = App.data.games || [];
+  const games = (App.data.games || []).filter(g => !g.hidden);
   const selected = App.selectedTags;
   const query = App.searchQuery;
 

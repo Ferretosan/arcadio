@@ -5,7 +5,7 @@
       "tag": "new"
     },
     {
-      "title": "arcadio+ [Originals]",
+      "title": "arcadio+ Originals",
       "tag": "arcadio"
     },
     {
@@ -35,7 +35,8 @@
         "simulation",
         "all"
       ],
-      "thumbnail": "newicons/a dark room.webp"
+      "thumbnail": "newicons/a dark room.webp",
+      "hidden": true
     },
     {
       "id": "asciispace",
@@ -47,7 +48,8 @@
         "retro",
         "all"
       ],
-      "thumbnail": "newicons/ascii space.png"
+      "thumbnail": "newicons/ascii space.png",
+      "hidden": true
     },
     {
       "id": "asteroids",
@@ -59,7 +61,8 @@
         "arcade",
         "all"
       ],
-      "thumbnail": "newicons/asteroids.png"
+      "thumbnail": "newicons/asteroids.png",
+      "hidden": true
     },
     {
       "id": "astray",
@@ -1195,7 +1198,8 @@
         "strategy",
         "all"
       ],
-      "thumbnail": "newicons/space company.png"
+      "thumbnail": "newicons/space company.png",
+      "hidden": true
     },
     {
       "id": "spacegarden",
