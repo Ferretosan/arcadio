@@ -1,0 +1,1251 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#0d0620" />
+    <title>Neon Rush</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d0620'/%3E%3Ccircle cx='32' cy='34' r='13' fill='%237cf5c8'/%3E%3Ccircle cx='27' cy='32' r='2.5' fill='%230d0620'/%3E%3Ccircle cx='37' cy='32' r='2.5' fill='%230d0620'/%3E%3Cpath d='M14 55h36' stroke='%23ff2e88' stroke-width='3'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+      * { box-sizing: border-box; }
+      html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+      body {
+        font-family: "Nunito", "Segoe UI", sans-serif;
+        background: #0d0620;
+        color: #f4efff;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+      #app { position: fixed; inset: 0; }
+      .hud { position: absolute; inset: 0; pointer-events: none; }
+      .hud-card {
+        position: absolute; top: 16px; left: 16px;
+        min-width: 186px; padding: 13px 16px 11px;
+        border-radius: 20px;
+        background: rgba(16, 9, 36, 0.62);
+        border: 1px solid rgba(124, 245, 200, 0.18);
+        box-shadow: 0 14px 35px rgba(3, 1, 12, 0.5);
+        backdrop-filter: blur(14px);
+      }
+      .score-row { display: flex; align-items: flex-end; gap: 8px; margin-top: 4px; }
+      .score-num { font-family: "Baloo 2", sans-serif; font-size: 44px; font-weight: 800; line-height: 0.95; letter-spacing: -1px; color: #fff; text-shadow: 0 0 18px rgba(124, 245, 200, 0.3); }
+      .score-unit { font-size: 12px; font-weight: 900; color: #b9a9e6; padding-bottom: 6px; text-transform: uppercase; letter-spacing: 0.08em; }
+      .score-sub { display: flex; gap: 13px; margin-top: 7px; font-size: 12px; font-weight: 800; color: #a795d8; }
+      .score-sub b { color: #7cf5c8; }
+      .leaderboard {
+        position: absolute; top: 16px; right: 16px; width: 196px;
+        padding: 11px 13px 9px; border-radius: 18px;
+        background: rgba(16, 9, 36, 0.58);
+        border: 1px solid rgba(124, 245, 200, 0.16);
+        box-shadow: 0 14px 35px rgba(3, 1, 12, 0.44);
+        backdrop-filter: blur(14px);
+      }
+      .lb-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
+      .lb-title { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 900; color: #a795d8; }
+      .lb-rank { font-family: "Baloo 2", sans-serif; font-weight: 800; color: #ffd166; font-size: 14px; }
+      #lb-list { list-style: none; margin: 0; padding: 0; }
+      #lb-list li { display: grid; grid-template-columns: 16px 9px 1fr auto; align-items: center; gap: 6px; padding: 2.5px 0; font-size: 11.5px; font-weight: 800; color: #a795d8; }
+      #lb-list li.me { color: #fff; }
+      .lb-num { color: #7f6cb3; font-size: 10px; text-align: right; }
+      .lb-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot, #999); box-shadow: 0 0 6px var(--dot, #999); }
+      .lb-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .lb-mass { color: #8f7dc0; font-size: 10.5px; }
+      li.me .lb-mass { color: #ffd166; }
+      .feed { position: absolute; left: 16px; bottom: 76px; display: flex; flex-direction: column; gap: 6px; max-width: 46vw; }
+      .feed-line {
+        padding: 6px 11px; border-radius: 11px; width: fit-content;
+        background: rgba(18, 10, 40, 0.72); color: #fff;
+        font-size: 11.5px; font-weight: 700; backdrop-filter: blur(6px);
+        border: 1px solid rgba(124, 245, 200, 0.12);
+        animation: feedIn 0.3s ease both;
+      }
+      .feed-line.fade { opacity: 0; transition: opacity 0.4s ease; }
+      @keyframes feedIn { from { opacity: 0; transform: translateY(8px); } }
+      .hint {
+        position: absolute; left: 50%; bottom: 38px; transform: translateX(-50%);
+        display: flex; gap: 14px; padding: 7px 14px; border-radius: 999px;
+        background: rgba(18, 10, 40, 0.62); color: #fff; font-size: 11px; font-weight: 800;
+        backdrop-filter: blur(6px); transition: opacity 0.6s ease; white-space: nowrap;
+        border: 1px solid rgba(124, 245, 200, 0.12);
+      }
+      .hint.fade { opacity: 0; }
+      .hint b { color: #7cf5c8; }
+      .mute-btn {
+        position: absolute; top: 16px; left: 220px; width: 38px; height: 38px;
+        border: 1px solid rgba(124, 245, 200, 0.2); border-radius: 50%;
+        background: rgba(16, 9, 36, 0.62); color: #c9fbe8; cursor: pointer;
+        display: grid; place-items: center; backdrop-filter: blur(10px);
+        box-shadow: 0 8px 20px rgba(3, 1, 12, 0.44); pointer-events: auto;
+      }
+      .mute-btn svg { width: 18px; height: 18px; fill: currentColor; }
+      .mute-btn .icon-off { display: none; }
+      .mute-btn.muted .icon-on { display: none; }
+      .mute-btn.muted .icon-off { display: block; }
+      .overlay {
+        position: absolute; inset: 0; display: grid; place-items: center;
+        padding: 18px; background: rgba(8, 3, 22, 0.55);
+        backdrop-filter: blur(7px); z-index: 10;
+      }
+      .overlay.is-hidden { display: none; }
+      .card {
+        width: min(400px, 94vw); padding: 30px 28px 24px; text-align: center;
+        border-radius: 30px;
+        background: linear-gradient(165deg, rgba(31, 16, 62, 0.97), rgba(19, 10, 40, 0.98));
+        border: 1px solid rgba(124, 245, 200, 0.24);
+        box-shadow: 0 30px 70px rgba(2, 0, 10, 0.7), inset 0 1px 0 rgba(124, 245, 200, 0.12);
+        animation: cardIn 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+        color: #f4efff;
+      }
+      @keyframes cardIn { from { opacity: 0; transform: translateY(14px) scale(0.97); } }
+      .mascot { position: relative; width: 96px; height: 88px; margin: 0 auto 8px; }
+      .mascot .orb {
+        position: absolute; inset: 6px; border-radius: 50%;
+        background: radial-gradient(circle at 34% 30%, #d6fff1, #7cf5c8 52%, #2fc98d);
+        box-shadow: 0 0 30px rgba(124, 245, 200, 0.55), 0 12px 24px rgba(4, 30, 24, 0.4);
+        animation: bob 2.4s ease-in-out infinite;
+      }
+      @keyframes bob { 50% { transform: translateY(-6px) rotate(-2deg); } }
+      .mascot .eye { position: absolute; top: 34px; width: 17px; height: 21px; border-radius: 50%; background: #fff; }
+      .mascot .eye.l { left: 24px; } .mascot .eye.r { right: 24px; }
+      .mascot .eye i { position: absolute; left: 5px; top: 7px; width: 8px; height: 10px; border-radius: 50%; background: #0d0620; }
+      .mascot .cheek { position: absolute; top: 49px; width: 11px; height: 6px; border-radius: 50%; background: rgba(255, 255, 255, 0.4); }
+      .mascot .cheek.l { left: 11px; } .mascot .cheek.r { right: 11px; }
+      .mascot .trail { position: absolute; left: 50%; bottom: -6px; width: 46px; height: 12px; margin-left: -23px; border-radius: 50%; background: rgba(124, 245, 200, 0.3); filter: blur(6px); }
+      h1 { font-family: "Baloo 2", sans-serif; font-size: 40px; line-height: 1; margin: 8px 0 2px; letter-spacing: -1px; }
+      h1 span { color: #7cf5c8; text-shadow: 0 0 22px rgba(124, 245, 200, 0.4); }
+      .tagline { margin: 0 0 18px; color: #b9a9e6; font-size: 13.5px; font-weight: 700; }
+      .play-btn {
+        width: 100%; padding: 14px 18px; border: 0; border-radius: 16px; cursor: pointer;
+        background: linear-gradient(180deg, #9affdc, #3fdca9);
+        box-shadow: 0 10px 24px rgba(63, 220, 169, 0.34), inset 0 1px 0 rgba(255,255,255,0.5);
+        color: #073626; font-family: "Baloo 2", sans-serif; font-size: 20px; font-weight: 800;
+        letter-spacing: 0.06em; transition: transform 0.12s ease, box-shadow 0.12s ease;
+      }
+      .play-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(63, 220, 169, 0.44); }
+      .play-btn:active { transform: translateY(0); }
+      .ghost-btn { width: 100%; margin-top: 9px; padding: 10px; border: 0; border-radius: 13px; background: transparent; color: #b9a9e6; font-family: "Nunito", sans-serif; font-size: 13px; font-weight: 900; cursor: pointer; }
+      .ghost-btn:hover { background: rgba(124, 245, 200, 0.08); color: #fff; }
+      .controls-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 7px; }
+      .controls-row span { padding: 5px 9px; border-radius: 8px; background: rgba(124, 245, 200, 0.08); color: #cbbcf0; font-size: 10.5px; font-weight: 800; }
+      .controls-row b { color: #fff; }
+      .dead-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 16px 0 18px; }
+      .dead-stats div { background: rgba(124, 245, 200, 0.07); border-radius: 13px; padding: 9px; }
+      .dead-stats span { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.09em; font-weight: 900; color: #9382c4; }
+      .dead-stats b { font-family: "Baloo 2", sans-serif; font-size: 23px; color: #fff; }
+      .dead-card h2, .pause-card h2 { font-family: "Baloo 2", sans-serif; font-size: 30px; margin: 4px 0 4px; }
+      .dead-card p, .pause-card p { margin: 0; color: #b9a9e6; font-size: 13px; font-weight: 700; }
+      .touch-only { display: none; }
+      @media (max-width: 720px) {
+        .hud-card { top: 10px; left: 10px; min-width: 140px; padding: 10px 12px 9px; }
+        .score-num { font-size: 34px; }
+        .leaderboard { top: 10px; right: 10px; width: 142px; padding: 8px 10px 6px; }
+        #lb-list li { font-size: 10px; grid-template-columns: 13px 7px 1fr auto; gap: 4px; }
+        .mute-btn { top: 10px; left: auto; right: 160px; width: 34px; height: 34px; }
+        .feed { left: 10px; bottom: 70px; max-width: 62vw; }
+        .feed-line { font-size: 10.5px; }
+        .hint { bottom: 16px; font-size: 10px; gap: 9px; padding: 6px 11px; }
+        .touch-only { display: inline; }
+        .desktop-only { display: none; }
+        h1 { font-size: 34px; }
+        .card { padding: 24px 20px 18px; }
+      }
+      @media (max-width: 430px) {
+        .leaderboard { width: 124px; }
+        .lb-mass { display: none; }
+        .mute-btn { right: 140px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" data-mode="menu">
+      <canvas id="game" aria-label="Neon Rush lane runner"></canvas>
+
+      <div class="hud">
+        <div class="hud-card">
+          <div class="score-row">
+            <span class="score-num" id="distance-value">0</span>
+            <span class="score-unit">m</span>
+          </div>
+          <div class="score-sub">
+            <span>Best <b id="best-value">0</b></span>
+            <span>Orbs <b id="orb-value">0</b></span>
+          </div>
+        </div>
+
+        <aside class="leaderboard">
+          <div class="lb-head"><span class="lb-title">Top runners</span><span class="lb-rank" id="player-rank"></span></div>
+          <ol id="lb-list"></ol>
+        </aside>
+
+        <div class="feed" id="feed" aria-live="polite"></div>
+
+        <div class="hint" id="hint">
+          <span class="desktop-only"><b>← →</b> / A D switch lanes</span>
+          <span class="touch-only"><b>Swipe</b> or tap sides</span>
+          <span class="desktop-only"><b>Esc</b> pause</span>
+        </div>
+      </div>
+
+      <button class="mute-btn" id="mute-btn" aria-label="Toggle sound" title="Toggle sound">
+        <svg class="icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+
+      <div class="overlay" id="menu">
+        <div class="card">
+          <div class="mascot" aria-hidden="true">
+            <span class="orb"></span>
+            <span class="eye l"><i></i></span><span class="eye r"><i></i></span>
+            <span class="cheek l"></span><span class="cheek r"></span>
+            <span class="trail"></span>
+          </div>
+          <h1>NEON <span>RUSH</span></h1>
+          <p class="tagline">Three lanes, one glowing orb, zero brakes.</p>
+          <button class="play-btn" id="play-btn" type="button">PLAY</button>
+          <div class="controls-row">
+            <span class="desktop-only"><b>← →</b> switch lanes</span>
+            <span class="touch-only"><b>Swipe</b> to switch</span>
+            <span><b>Orbs</b> +12 m</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="overlay is-hidden" id="dead">
+        <div class="card dead-card">
+          <h2>Crashed out!</h2>
+          <p id="dead-sub">The grid claims another orb.</p>
+          <div class="dead-stats">
+            <div><span>Distance</span><b id="stat-distance">0 m</b></div>
+            <div><span>Orbs</span><b id="stat-orbs">0</b></div>
+            <div><span>Best</span><b id="stat-best">0 m</b></div>
+            <div><span>Rank</span><b id="stat-rank">#1</b></div>
+          </div>
+          <button class="play-btn" id="again-btn" type="button">RUSH AGAIN</button>
+          <button class="ghost-btn" id="menu-btn" type="button">Main menu</button>
+        </div>
+      </div>
+
+      <div class="overlay is-hidden" id="pause">
+        <div class="card pause-card">
+          <h2>Paused</h2>
+          <p>The grid can wait.</p>
+          <div style="height:14px"></div>
+          <button class="play-btn" id="resume-btn" type="button">RESUME</button>
+          <button class="ghost-btn" id="pause-menu-btn" type="button">Main menu</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (() => {
+        "use strict";
+
+        const $ = (id) => document.getElementById(id);
+        const canvas = $("game");
+        const ctx = canvas.getContext("2d");
+        const app = $("app");
+        const feedEl = $("feed");
+        const distanceEl = $("distance-value");
+        const orbEl = $("orb-value");
+        const bestEl = $("best-value");
+        const lbListEl = $("lb-list");
+        const playerRankEl = $("player-rank");
+        const hintEl = $("hint");
+        const menuEl = $("menu");
+        const deadEl = $("dead");
+        const pauseEl = $("pause");
+        const muteBtn = $("mute-btn");
+
+        const CONFIG = {
+          playZ: 140,
+          spawnZ: 1900,
+          laneCount: 3,
+          startSpeed: 300,
+          maxSpeed: 760,
+          accel: 9,
+          bestKey: "neon-rush-best",
+        };
+
+        const BOT_NAMES = ["Mochi", "Pip", "Waffles", "Ziggy", "Luna", "Nori", "Boba", "Sprout", "Toast", "Kiwi", "Peach", "Milo", "Nugget", "Jelly", "Puff", "Cleo"];
+        const BOT_COLORS = ["#ff2e88", "#ffd166", "#22d3ee", "#b78cf5", "#ff8b72", "#7cf5c8", "#f45bb5", "#93a8f7", "#ffe08a"];
+        const TIPS = [
+          "Swipe early - the orb drifts into the lane.",
+          "Gold orbs add 12 m each. Grab them.",
+          "A teal shield absorbs one crash.",
+          "Double gates leave one lane open. Find it.",
+          "The grid speeds up. So should you.",
+        ];
+
+        let W = window.innerWidth;
+        let H = window.innerHeight;
+        let dpr = 1;
+        let laneScreen = 200;
+        let laneWorld = 60;
+        let focal = 700;
+        let horizonY = 0;
+        let camH = 68;
+        let playZ = CONFIG.playZ;
+
+        let muted = false;
+        let audio = null;
+
+        function readStore(key) {
+          try { return window.localStorage.getItem(key); } catch (err) { return null; }
+        }
+        function writeStore(key, value) {
+          try { window.localStorage.setItem(key, value); } catch (err) {}
+        }
+
+        const state = {
+          mode: "menu",
+          time: 0,
+          lastFrame: 0,
+          speed: CONFIG.startSpeed,
+          distance: 0,
+          orbs: 0,
+          best: Number(readStore(CONFIG.bestKey) || 0) || 0,
+          playerLane: 0,
+          targetLane: 0,
+          laneLean: 0,
+          shield: false,
+          invuln: 0,
+          objects: [],
+          particles: [],
+          floaters: [],
+          roadScroll: 0,
+          spawnTimer: 0.9,
+          socialTimer: 7,
+          lbTimer: 0,
+          hintTimer: 0,
+          shake: 0,
+          flash: 0,
+          bots: [],
+          shieldTimer: 15,
+        };
+
+        const rand = (a, b) => a + Math.random() * (b - a);
+        const pick = (arr) => arr[(Math.random() * arr.length) | 0];
+        const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+        const esc = (str) => String(str).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+
+        function ensureAudio() {
+          if (audio) return;
+          try { audio = new (window.AudioContext || window.webkitAudioContext)(); } catch (err) { audio = null; }
+        }
+        function tone(freq, dur, type = "sine", vol = 0.03, slideTo = 0) {
+          if (muted || !audio) return;
+          try {
+            const t = audio.currentTime;
+            const osc = audio.createOscillator();
+            const gain = audio.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, t);
+            if (slideTo) osc.frequency.exponentialRampToValueAtTime(Math.max(30, slideTo), t + dur);
+            gain.gain.setValueAtTime(vol, t);
+            gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+            osc.connect(gain).connect(audio.destination);
+            osc.start(t);
+            osc.stop(t + dur + 0.02);
+          } catch (err) {}
+        }
+
+        function project(x, z) {
+          const s = focal / z;
+          return { x: W / 2 + x * s, y: horizonY + camH * s, s };
+        }
+
+        function projectLane(lane, z) {
+          return project(lane * laneWorld, z);
+        }
+
+        function layout() {
+          W = window.innerWidth;
+          H = window.innerHeight;
+          dpr = Math.min(1.5, window.devicePixelRatio || 1);
+          canvas.width = Math.round(W * dpr);
+          canvas.height = Math.round(H * dpr);
+          canvas.style.width = W + "px";
+          canvas.style.height = H + "px";
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          horizonY = H * 0.34;
+          focal = H * 0.9;
+          playZ = CONFIG.playZ;
+          camH = 68 * (H / 800);
+          laneScreen = Math.min(W, 760) * 0.2;
+          laneWorld = (laneScreen * playZ) / focal;
+          bgGradient = null;
+        }
+
+        function setupBots() {
+          state.bots = [];
+          for (let i = 0; i < 9; i++) {
+            state.bots.push({
+              name: BOT_NAMES[i % BOT_NAMES.length],
+              color: BOT_COLORS[i % BOT_COLORS.length],
+              distance: rand(20, 420),
+              rate: rand(5, 16),
+            });
+          }
+          state.bots.sort((a, b) => b.distance - a.distance);
+        }
+
+        function resetRun() {
+          state.speed = CONFIG.startSpeed;
+          state.distance = 0;
+          state.orbs = 0;
+          state.playerLane = 0;
+          state.targetLane = 0;
+          state.laneLean = 0;
+          state.shield = false;
+          state.invuln = 0;
+          state.objects = [];
+          state.particles = [];
+          state.floaters = [];
+          state.roadScroll = 0;
+          state.spawnTimer = 0.85;
+          state.shieldTimer = 18;
+          state.shake = 0;
+          state.flash = 0;
+          state.hintTimer = 0;
+          setupBots();
+        }
+
+        function startGame() {
+          ensureAudio();
+          menuEl.classList.add("is-hidden");
+          deadEl.classList.add("is-hidden");
+          pauseEl.classList.add("is-hidden");
+          app.dataset.mode = "playing";
+          state.mode = "playing";
+          state.time = 0;
+          resetRun();
+          distanceEl.textContent = "0";
+          orbEl.textContent = "0";
+          bestEl.textContent = String(state.best);
+          hintEl.classList.remove("fade");
+          feedEl.innerHTML = "";
+          addFeed([{ text: "You entered the grid!", color: "#7cf5c8", bold: true }]);
+          renderLeaderboard();
+          tone(520, 0.12, "sine", 0.03, 760);
+        }
+
+        function goToMenu() {
+          state.mode = "menu";
+          app.dataset.mode = "menu";
+          menuEl.classList.remove("is-hidden");
+          deadEl.classList.add("is-hidden");
+          pauseEl.classList.add("is-hidden");
+          feedEl.innerHTML = "";
+          hintEl.classList.add("fade");
+          state.objects = [];
+          state.particles = [];
+          state.floaters = [];
+          state.playerLane = 0;
+          state.targetLane = 0;
+          state.shield = false;
+          state.mode = "menu";
+          app.dataset.mode = "menu";
+          menuEl.classList.remove("is-hidden");
+          renderLeaderboard();
+        }
+
+        function togglePause() {
+          if (state.mode === "playing") {
+            state.mode = "paused";
+            app.dataset.mode = "paused";
+            pauseEl.classList.remove("is-hidden");
+          } else if (state.mode === "paused") {
+            state.mode = "playing";
+            app.dataset.mode = "playing";
+            pauseEl.classList.add("is-hidden");
+            state.lastFrame = performance.now();
+          }
+        }
+
+        function endGame() {
+          if (state.mode !== "playing") return;
+          state.mode = "dead";
+          app.dataset.mode = "dead";
+          state.shake = 1;
+          state.flash = 0.7;
+          const meters = Math.round(state.distance);
+          state.best = Math.max(state.best, meters);
+          writeStore(CONFIG.bestKey, String(Math.round(state.best)));
+          $("dead-sub").textContent = meters > 1200 ? "You were flying." : meters > 500 ? "The grid nearly blinked." : "The grid claims another orb.";
+          $("stat-distance").textContent = meters + " m";
+          $("stat-orbs").textContent = String(state.orbs);
+          $("stat-best").textContent = Math.round(state.best) + " m";
+          $("stat-rank").textContent = "#" + getRank();
+          hintEl.classList.add("fade");
+          deadEl.classList.remove("is-hidden");
+          tone(210, 0.5, "sawtooth", 0.045, 60);
+          setTimeout(() => tone(140, 0.4, "square", 0.03, 50), 90);
+        }
+
+        function getRank() {
+          let rank = 1;
+          for (const bot of state.bots) if (bot.distance > state.distance) rank++;
+          return rank;
+        }
+
+        function addFeed(parts) {
+          if (state.mode === "menu") return;
+          const line = document.createElement("div");
+          line.className = "feed-line";
+          for (const part of parts) {
+            const span = document.createElement("span");
+            span.textContent = part.text;
+            if (part.color) span.style.color = part.color;
+            if (part.bold) span.style.fontWeight = "900";
+            line.appendChild(span);
+          }
+          feedEl.appendChild(line);
+          while (feedEl.children.length > 4) feedEl.removeChild(feedEl.firstElementChild);
+          setTimeout(() => {
+            line.classList.add("fade");
+            setTimeout(() => line.remove(), 420);
+          }, 5600);
+        }
+
+        function addFloater(x, y, text, color, size) {
+          state.floaters.push({ x, y, text, color, size: size || 20, life: 1.05, maxLife: 1.05 });
+        }
+
+        function burst(x, y, color, count, power, z) {
+          for (let i = 0; i < count; i++) {
+            const a = rand(0, Math.PI * 2);
+            const speed = rand(power * 0.2, power);
+            state.particles.push({
+              x, y,
+              vx: Math.cos(a) * speed,
+              vy: Math.sin(a) * speed - 40,
+              r: rand(2, 5),
+              color,
+              z: z || 0,
+              life: rand(0.3, 0.75),
+              maxLife: 0.75,
+              gravity: 620,
+            });
+          }
+        }
+
+        function switchLane(dir) {
+          if (state.mode !== "playing") return;
+          const next = clamp(state.targetLane + dir, -1, 1);
+          if (next === state.targetLane) return;
+          state.targetLane = next;
+          state.laneLean = dir * 0.7;
+          tone(480 + (next + 1) * 70, 0.05, "triangle", 0.016, 560 + (next + 1) * 70);
+        }
+
+        function spawnRow() {
+          const roll = Math.random();
+          if (roll < 0.1 && !state.shield) {
+            state.objects.push({ type: "shield", lane: pick([-1, 0, 1]), z: CONFIG.spawnZ, resolved: false, phase: rand(0, 6.28) });
+            return;
+          }
+          if (roll < 0.4) {
+            state.objects.push({ type: "orb", lane: pick([-1, 0, 1]), z: CONFIG.spawnZ, resolved: false, phase: rand(0, 6.28) });
+            return;
+          }
+          if (Math.random() < 0.3) {
+            const a = pick([-1, 0]);
+            state.objects.push({ type: "gate", lanes: [a, a + 1], centerLane: a + 0.5, span: 2, z: CONFIG.spawnZ, resolved: false, hue: rand(0, 1) });
+          } else {
+            const lane = pick([-1, 0, 1]);
+            state.objects.push({ type: "gate", lanes: [lane], centerLane: lane, span: 1, z: CONFIG.spawnZ, resolved: false, hue: rand(0, 1) });
+          }
+        }
+
+        function collectOrb(obj) {
+          state.orbs++;
+          state.distance += 12;
+          burst(projectLane(obj.lane, obj.z).x, projectLane(obj.lane, obj.z).y - 40, "#ffd166", 12, 190);
+          const p = projectLane(obj.lane, obj.z);
+          addFloater(p.x, p.y - 60, "+12 m", "#ffd166", 17);
+          tone(760, 0.08, "sine", 0.024, 1080);
+        }
+
+        function grabShield(obj) {
+          state.shield = true;
+          state.invuln = 0.2;
+          const p = projectLane(obj.lane, obj.z);
+          burst(p.x, p.y - 40, "#7cf5c8", 14, 200);
+          addFloater(p.x, p.y - 60, "SHIELD", "#7cf5c8", 18);
+          tone(620, 0.12, "sine", 0.024, 940);
+        }
+
+        function hitGate(obj) {
+          if (state.invuln > 0) return;
+          const p = projectLane(obj.centerLane, obj.z);
+          if (state.shield) {
+            state.shield = false;
+            state.invuln = 1.15;
+            state.shake = 0.8;
+            state.flash = 0.5;
+            burst(p.x, p.y - 30, "#7cf5c8", 20, 300);
+            addFloater(p.x, p.y - 70, "SHIELD BROKE", "#7cf5c8", 18);
+            tone(320, 0.2, "square", 0.035, 160);
+            return;
+          }
+          burst(p.x, p.y - 30, "#ff2e88", 24, 360);
+          endGame();
+        }
+
+        function updateObjects(dt) {
+          for (const obj of state.objects) {
+            obj.z -= state.speed * dt;
+            if (obj.resolved) continue;
+            if (obj.z > playZ + 22) continue;
+            const lane = obj.type === "gate" ? obj.lanes : [obj.lane];
+            const overlaps = lane.some((l) => Math.abs(state.playerLane - l) < 0.55);
+            if (obj.type === "orb" && overlaps) {
+              obj.resolved = true;
+              collectOrb(obj);
+            } else if (obj.type === "shield" && overlaps) {
+              obj.resolved = true;
+              grabShield(obj);
+            } else if (obj.type === "gate") {
+              if (overlaps) {
+                obj.resolved = true;
+                hitGate(obj);
+              } else if (obj.z < playZ - 24) {
+                obj.resolved = true;
+                if (Math.abs(state.playerLane - obj.centerLane) < 1.2) {
+                  addFloater(projectLane(obj.centerLane, obj.z).x, projectLane(obj.centerLane, obj.z).y - 44, "NEAR MISS", "#22d3ee", 14);
+                  state.distance += 4;
+                }
+              }
+            } else if (obj.z < playZ - 40) {
+              obj.resolved = true;
+            }
+          }
+          for (let i = state.objects.length - 1; i >= 0; i--) {
+            if (state.objects[i].z < 70) state.objects.splice(i, 1);
+          }
+        }
+
+        function updateParticles(dt) {
+          for (let i = state.particles.length - 1; i >= 0; i--) {
+            const p = state.particles[i];
+            p.life -= dt;
+            if (p.life <= 0) { state.particles.splice(i, 1); continue; }
+            p.x += p.vx * dt;
+            p.y += p.vy * dt;
+            if (p.gravity) p.vy += p.gravity * dt;
+          }
+          for (let i = state.floaters.length - 1; i >= 0; i--) {
+            const f = state.floaters[i];
+            f.life -= dt;
+            if (f.life <= 0) { state.floaters.splice(i, 1); continue; }
+            f.y -= 32 * dt;
+          }
+        }
+
+        function updateSocial(dt) {
+          if (state.mode !== "playing" && state.mode !== "dead") return;
+          state.socialTimer -= dt;
+          if (state.socialTimer > 0) return;
+          state.socialTimer = rand(8, 15);
+          const bot = pick(state.bots);
+          if (Math.random() < 0.55) {
+            addFeed([{ text: bot.name, color: bot.color, bold: true }, { text: ` passed ${Math.round(bot.distance)} m`, color: "#d9d1f5" }]);
+          } else {
+            addFeed([{ text: "Tip: ", color: "#7cf5c8", bold: true }, { text: pick(TIPS), color: "#eee8ff" }]);
+          }
+        }
+
+        function updateBots(dt) {
+          if (state.mode !== "playing") return;
+          for (const bot of state.bots) bot.distance += bot.rate * dt;
+        }
+
+        function renderLeaderboard() {
+          const rows = [{ name: "You", color: "#7cf5c8", distance: state.distance, me: true }]
+            .concat(state.bots.map((b) => ({ name: b.name, color: b.color, distance: b.distance })))
+            .sort((a, b) => b.distance - a.distance);
+          const idx = rows.findIndex((r) => r.me);
+          playerRankEl.textContent = idx >= 0 ? "#" + (idx + 1) : "";
+          let html = "";
+          rows.slice(0, 7).forEach((r, i) => {
+            html += `<li class="${r.me ? "me" : ""}"><span class="lb-num">${i + 1}</span><span class="lb-dot" style="--dot:${r.color}"></span><span class="lb-name">${esc(r.name)}</span><span class="lb-mass">${Math.round(r.distance)}m</span></li>`;
+          });
+          lbListEl.innerHTML = html;
+        }
+
+        function update(dt) {
+          state.time += dt;
+          state.shake = Math.max(0, state.shake - dt * 2.6);
+          state.flash = Math.max(0, state.flash - dt * 2.4);
+          state.invuln = Math.max(0, state.invuln - dt);
+          updateParticles(dt);
+
+          if (state.mode === "menu") {
+            state.roadScroll += 150 * dt;
+            return;
+          }
+
+          if (state.mode === "dead") {
+            state.roadScroll += state.speed * dt * 0.25;
+            state.speed *= Math.exp(-dt * 1.6);
+            return;
+          }
+          if (state.mode !== "playing") return;
+
+          state.speed = Math.min(CONFIG.maxSpeed, state.speed + CONFIG.accel * dt);
+          state.distance += state.speed * dt * 0.05;
+          state.roadScroll += state.speed * dt;
+          state.playerLane += (state.targetLane - state.playerLane) * (1 - Math.exp(-dt * 15));
+          state.laneLean *= Math.exp(-dt * 6);
+
+          state.spawnTimer -= dt;
+          if (state.spawnTimer <= 0) {
+            spawnRow();
+            state.spawnTimer = rand(250, 390) / state.speed;
+          }
+          state.shieldTimer -= dt;
+          if (state.shieldTimer <= 0) {
+            state.shieldTimer = rand(18, 30);
+            if (!state.shield) {
+              state.objects.push({ type: "shield", lane: pick([-1, 0, 1]), z: CONFIG.spawnZ, resolved: false, phase: rand(0, 6.28) });
+            }
+          }
+
+          updateObjects(dt);
+          updateBots(dt);
+          updateSocial(dt);
+          updateHud(dt);
+          distanceEl.textContent = String(Math.round(state.distance));
+          orbEl.textContent = String(state.orbs);
+          bestEl.textContent = String(Math.round(Math.max(state.best, state.distance)));
+        }
+
+        function updateHud(dt) {
+          state.hintTimer += dt;
+          if (state.hintTimer > 12) hintEl.classList.add("fade");
+          state.lbTimer -= dt;
+          if (state.lbTimer <= 0) {
+            state.lbTimer = 0.45;
+            renderLeaderboard();
+          }
+        }
+
+        // ------------------------------------------------------------- rendering
+
+        let bgGradient = null;
+
+        function resize() {
+          layout();
+        }
+
+        function drawBackground(t) {
+          if (!bgGradient) {
+            bgGradient = ctx.createLinearGradient(0, 0, 0, H);
+            bgGradient.addColorStop(0, "#070313");
+            bgGradient.addColorStop(0.34, "#160a2e");
+            bgGradient.addColorStop(0.36, "#2a0f45");
+            bgGradient.addColorStop(1, "#12061f");
+          }
+          ctx.fillStyle = bgGradient;
+          ctx.fillRect(0, 0, W, H);
+
+          // Stars.
+          for (let i = 0; i < 46; i++) {
+            const sx = ((i * 197.3) % W);
+            const sy = ((i * 89.7) % (horizonY * 0.92));
+            const a = 0.25 + Math.sin(t * 1.2 + i) * 0.2;
+            ctx.globalAlpha = Math.max(0, a);
+            ctx.fillStyle = "#dcd0ff";
+            ctx.fillRect(sx, sy, 1.6, 1.6);
+          }
+          ctx.globalAlpha = 1;
+
+          // Horizon glow.
+          const glow = ctx.createLinearGradient(0, horizonY - H * 0.16, 0, horizonY + H * 0.05);
+          glow.addColorStop(0, "rgba(255, 46, 136, 0)");
+          glow.addColorStop(0.72, "rgba(255, 46, 136, 0.24)");
+          glow.addColorStop(1, "rgba(34, 211, 238, 0.08)");
+          ctx.fillStyle = glow;
+          ctx.fillRect(0, horizonY - H * 0.16, W, H * 0.21);
+
+          // Sun / moon disc on the horizon.
+          ctx.beginPath();
+          ctx.arc(W * 0.5, horizonY, Math.min(W, H) * 0.09, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(255, 46, 136, 0.22)";
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(W * 0.5, horizonY, Math.min(W, H) * 0.09, Math.PI, 0);
+          ctx.fillStyle = "rgba(255, 143, 177, 0.3)";
+          ctx.fill();
+
+          // Distant city silhouette.
+          ctx.fillStyle = "rgba(10, 4, 24, 0.85)";
+          const base = horizonY + 1;
+          ctx.beginPath();
+          ctx.moveTo(0, base);
+          const step = Math.max(22, W / 34);
+          for (let x = 0; x <= W + step; x += step) {
+            const seed = Math.sin(x * 0.73) * 0.5 + 0.5;
+            const h = 10 + seed * 46;
+            ctx.lineTo(x, base - h);
+            ctx.lineTo(x + step * 0.55, base - h);
+            ctx.lineTo(x + step * 0.55, base);
+          }
+          ctx.lineTo(W, base);
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        function drawRoad() {
+          const edge = laneWorld * 1.68;
+          const zNear = 72;
+          const zFar = 3000;
+          const nearL = project(-edge, zNear);
+          const nearR = project(edge, zNear);
+          const farL = project(-edge, zFar);
+          const farR = project(edge, zFar);
+
+          // Road surface.
+          const road = ctx.createLinearGradient(0, horizonY, 0, H);
+          road.addColorStop(0, "#2a0f45");
+          road.addColorStop(0.55, "#1c0a33");
+          road.addColorStop(1, "#150726");
+          ctx.beginPath();
+          ctx.moveTo(farL.x, farL.y);
+          ctx.lineTo(farR.x, farR.y);
+          ctx.lineTo(nearR.x, nearR.y);
+          ctx.lineTo(nearL.x, nearL.y);
+          ctx.closePath();
+          ctx.fillStyle = road;
+          ctx.fill();
+
+          // Cross grid lines.
+          const phase = state.roadScroll % 150;
+          ctx.lineCap = "round";
+          for (let z = 2800 - phase; z > zNear; z -= 150) {
+            const a = clamp(1 - z / 3000, 0.05, 0.7);
+            const l = project(-edge, z);
+            const r = project(edge, z);
+            ctx.strokeStyle = `rgba(124, 245, 200, ${a * 0.32})`;
+            ctx.lineWidth = Math.max(1, 2.4 * (playZ / z));
+            ctx.beginPath();
+            ctx.moveTo(l.x, l.y);
+            ctx.lineTo(r.x, r.y);
+            ctx.stroke();
+          }
+
+          // Lane dividers.
+          for (const lane of [-0.5, 0.5]) {
+            const near = project(lane * laneWorld * 2, zNear);
+            const far = project(lane * laneWorld * 2, zFar);
+            ctx.strokeStyle = "rgba(124, 245, 200, 0.3)";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(far.x, far.y);
+            ctx.lineTo(near.x, near.y);
+            ctx.stroke();
+          }
+
+          // Neon edges.
+          for (const side of [-1, 1]) {
+            const near = project(side * edge, zNear);
+            const far = project(side * edge, zFar);
+            ctx.save();
+            ctx.shadowColor = "#ff2e88";
+            ctx.shadowBlur = 18;
+            ctx.strokeStyle = "rgba(255, 46, 136, 0.9)";
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(far.x, far.y);
+            ctx.lineTo(near.x, near.y);
+            ctx.stroke();
+            ctx.restore();
+
+            ctx.strokeStyle = "rgba(34, 211, 238, 0.5)";
+            ctx.lineWidth = 1.4;
+            ctx.beginPath();
+            ctx.moveTo(far.x, far.y);
+            ctx.lineTo(near.x, near.y);
+            ctx.stroke();
+          }
+        }
+
+        function drawGate(obj) {
+          const p = projectLane(obj.centerLane, obj.z);
+          const scale = playZ / obj.z;
+          const w = laneScreen * 0.84 * obj.span * scale;
+          const h = laneScreen * 0.85 * scale;
+          if (w < 2) return;
+          const alpha = clamp((3000 - obj.z) / 900, 0.05, 1);
+          const top = p.y - h;
+          const color = obj.span === 2 ? "#b78cf5" : "#ff2e88";
+
+          ctx.save();
+          ctx.globalAlpha = alpha;
+
+          // Shadow on the road.
+          ctx.beginPath();
+          ctx.ellipse(p.x, p.y, w * 0.52, Math.max(1, h * 0.1), 0, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(0,0,0,0.35)";
+          ctx.fill();
+
+          ctx.shadowColor = color;
+          ctx.shadowBlur = Math.max(4, 16 * scale);
+
+          // Energy wall.
+          const grad = ctx.createLinearGradient(0, top, 0, p.y);
+          grad.addColorStop(0, "rgba(255, 255, 255, 0.18)");
+          grad.addColorStop(0.35, color);
+          grad.addColorStop(1, "rgba(20, 6, 34, 0.9)");
+          ctx.beginPath();
+          if (ctx.roundRect) ctx.roundRect(p.x - w / 2, top, w, h, Math.min(6, w * 0.08));
+          else ctx.rect(p.x - w / 2, top, w, h);
+          ctx.fillStyle = grad;
+          ctx.globalAlpha = alpha * 0.7;
+          ctx.fill();
+          ctx.globalAlpha = alpha;
+
+          ctx.strokeStyle = color;
+          ctx.lineWidth = Math.max(1.4, 2.6 * scale);
+          ctx.stroke();
+
+          // Scanline stripes.
+          ctx.beginPath();
+          for (let i = 1; i < 4; i++) {
+            const yy = top + (h / 4) * i;
+            ctx.moveTo(p.x - w / 2 + 2, yy);
+            ctx.lineTo(p.x + w / 2 - 2, yy);
+          }
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.22)";
+          ctx.lineWidth = Math.max(1, 1.4 * scale);
+          ctx.stroke();
+
+          // Cap lights.
+          ctx.beginPath();
+          ctx.arc(p.x - w * 0.3, top, Math.max(1.4, 3 * scale), 0, Math.PI * 2);
+          ctx.arc(p.x + w * 0.3, top, Math.max(1.4, 3 * scale), 0, Math.PI * 2);
+          ctx.fillStyle = "#fff";
+          ctx.fill();
+
+          ctx.restore();
+        }
+
+        function drawOrb(obj) {
+          const p = projectLane(obj.lane, obj.z);
+          const scale = playZ / obj.z;
+          const r = Math.max(2.5, laneScreen * 0.16 * scale);
+          const bob = Math.sin(state.time * 2.6 + obj.phase) * r * 0.3;
+          const cy = p.y - laneScreen * 0.3 * scale + bob;
+          const alpha = clamp((3000 - obj.z) / 900, 0.05, 1);
+
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.shadowColor = "#ffd166";
+          ctx.shadowBlur = Math.max(6, 22 * scale);
+          ctx.beginPath();
+          ctx.arc(p.x, cy, r * 1.9, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(255, 209, 102, 0.16)";
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(p.x, cy, r, 0, Math.PI * 2);
+          ctx.fillStyle = "#ffd166";
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          ctx.beginPath();
+          ctx.arc(p.x - r * 0.3, cy - r * 0.3, r * 0.3, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+          ctx.fill();
+          ctx.restore();
+        }
+
+        function drawShield(obj) {
+          const p = projectLane(obj.lane, obj.z);
+          const scale = playZ / obj.z;
+          const r = Math.max(3, laneScreen * 0.19 * scale);
+          const cy = p.y - laneScreen * 0.33 * scale + Math.sin(state.time * 2.2 + obj.phase) * r * 0.24;
+          const alpha = clamp((3000 - obj.z) / 900, 0.05, 1);
+
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.translate(p.x, cy);
+          ctx.rotate(state.time * 1.3 + obj.phase);
+          ctx.shadowColor = "#7cf5c8";
+          ctx.shadowBlur = Math.max(6, 24 * scale);
+          ctx.beginPath();
+          for (let i = 0; i < 6; i++) {
+            const a = (i / 6) * Math.PI * 2;
+            const x = Math.cos(a) * r;
+            const y = Math.sin(a) * r;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+          ctx.strokeStyle = "#7cf5c8";
+          ctx.lineWidth = Math.max(1.4, 2.4 * scale);
+          ctx.stroke();
+          ctx.fillStyle = "rgba(124, 245, 200, 0.16)";
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(0, 0, r * 0.36, 0, Math.PI * 2);
+          ctx.fillStyle = "#c9fbe8";
+          ctx.fill();
+          ctx.restore();
+        }
+
+        function drawPlayer(t) {
+          const p = project(state.playerLane * laneWorld, playZ);
+          const r = clamp(laneScreen * 0.27, 10, 27);
+          const bob = Math.sin(t * 3.2) * r * 0.16;
+          const cy = p.y - laneScreen * 0.32 + bob;
+          const tilt = state.laneLean * 0.22 + (state.targetLane - state.playerLane) * 0.12;
+
+          // Road shadow.
+          ctx.save();
+          ctx.globalAlpha = 0.34;
+          ctx.beginPath();
+          ctx.ellipse(p.x, p.y, r * 0.95, r * 0.26, 0, 0, Math.PI * 2);
+          ctx.fillStyle = "#000";
+          ctx.fill();
+          ctx.restore();
+
+          // Trail.
+          ctx.save();
+          ctx.globalAlpha = 0.22;
+          const trail = ctx.createLinearGradient(p.x, cy + r, p.x, cy + r + 90);
+          trail.addColorStop(0, "rgba(124, 245, 200, 0.8)");
+          trail.addColorStop(1, "rgba(124, 245, 200, 0)");
+          ctx.beginPath();
+          ctx.moveTo(p.x - r * 0.55, cy + r * 0.4);
+          ctx.lineTo(p.x + r * 0.55, cy + r * 0.4);
+          ctx.lineTo(p.x + r * 0.1, cy + r + 90);
+          ctx.lineTo(p.x - r * 0.1, cy + r + 90);
+          ctx.closePath();
+          ctx.fillStyle = trail;
+          ctx.fill();
+          ctx.restore();
+
+          ctx.save();
+          ctx.translate(p.x, cy);
+          ctx.rotate(tilt);
+          ctx.shadowColor = "#7cf5c8";
+          ctx.shadowBlur = 26;
+
+          const wob = 1 + Math.sin(t * 2.4) * 0.03;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, r * wob, r * (1 + Math.sin(t * 2.4 + 1) * 0.02), 0, 0, Math.PI * 2);
+          const grad = ctx.createRadialGradient(-r * 0.32, -r * 0.38, r * 0.1, 0, 0, r * 1.12);
+          grad.addColorStop(0, "#e6fff6");
+          grad.addColorStop(0.45, "#7cf5c8");
+          grad.addColorStop(1, "#2aa87d");
+          ctx.fillStyle = grad;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+
+          // Face.
+          const look = (state.targetLane - state.playerLane) * r * 0.22;
+          for (const sign of [-1, 1]) {
+            ctx.beginPath();
+            ctx.ellipse(sign * r * 0.32, -r * 0.1, r * 0.17, r * 0.22, 0, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(255, 255, 255, 0.94)";
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(sign * r * 0.32 + look, -r * 0.06, r * 0.085, 0, Math.PI * 2);
+            ctx.fillStyle = "#0d2e24";
+            ctx.fill();
+          }
+          ctx.beginPath();
+          ctx.arc(0, r * 0.18, r * 0.15, 0.15, Math.PI - 0.15);
+          ctx.strokeStyle = "rgba(10, 70, 52, 0.6)";
+          ctx.lineWidth = Math.max(1, r * 0.07);
+          ctx.lineCap = "round";
+          ctx.stroke();
+
+          // Shield ring.
+          if (state.shield) {
+            ctx.beginPath();
+            ctx.arc(0, 0, r * 1.5, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(124, 245, 200, ${0.55 + Math.sin(t * 6) * 0.2})`;
+            ctx.lineWidth = 2.4;
+            ctx.setLineDash([6, 7]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+          }
+          ctx.restore();
+        }
+
+        function drawParticles() {
+          for (const p of state.particles) {
+            const alpha = clamp(p.life / p.maxLife, 0, 1);
+            ctx.globalAlpha = alpha;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          for (const f of state.floaters) {
+            const alpha = clamp(f.life / f.maxLife, 0, 1);
+            ctx.globalAlpha = alpha;
+            ctx.font = `800 ${f.size}px "Baloo 2", sans-serif`;
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = "rgba(8, 3, 20, 0.7)";
+            ctx.strokeText(f.text, f.x, f.y);
+            ctx.fillStyle = f.color;
+            ctx.fillText(f.text, f.x, f.y);
+          }
+          ctx.globalAlpha = 1;
+        }
+
+        function drawSpeedLines(t) {
+          if (state.mode !== "playing") return;
+          const intensity = (state.speed - CONFIG.startSpeed) / (CONFIG.maxSpeed - CONFIG.startSpeed);
+          const count = Math.round(6 + intensity * 16);
+          ctx.save();
+          ctx.globalAlpha = 0.18 + intensity * 0.28;
+          ctx.strokeStyle = "#7cf5c8";
+          ctx.lineWidth = 1.5;
+          for (let i = 0; i < count; i++) {
+            const side = i % 2 === 0 ? -1 : 1;
+            const x = W / 2 + side * (W * 0.3 + ((i * 97) % Math.round(W * 0.18)));
+            const y = ((i * 131 + t * 900) % (H + 120)) - 60;
+            const len = 30 + intensity * 60;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x, y + len);
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+
+        function render(t) {
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          ctx.clearRect(0, 0, W, H);
+          drawBackground(t);
+
+          const shakeX = state.shake > 0 ? Math.sin(t * 86) * state.shake * 6 : 0;
+          const shakeY = state.shake > 0 ? Math.cos(t * 71) * state.shake * 5 : 0;
+          ctx.save();
+          ctx.translate(shakeX, shakeY);
+
+          drawRoad();
+          drawSpeedLines(t);
+
+          const sorted = state.objects.slice().sort((a, b) => b.z - a.z);
+          for (const obj of sorted) {
+            if (obj.z > 2900) continue;
+            if (obj.type === "gate") drawGate(obj);
+            else if (obj.type === "orb") drawOrb(obj);
+            else if (obj.type === "shield") drawShield(obj);
+          }
+
+          if (state.mode !== "dead") drawPlayer(t);
+          drawParticles();
+
+          ctx.restore();
+
+          if (state.flash > 0) {
+            ctx.fillStyle = `rgba(124, 245, 200, ${state.flash * 0.2})`;
+            ctx.fillRect(0, 0, W, H);
+          }
+
+          // Vignette.
+          const vig = ctx.createRadialGradient(W / 2, H * 0.55, Math.min(W, H) * 0.3, W / 2, H * 0.55, Math.max(W, H) * 0.75);
+          vig.addColorStop(0, "rgba(0,0,0,0)");
+          vig.addColorStop(1, "rgba(4,1,12,0.55)");
+          ctx.fillStyle = vig;
+          ctx.fillRect(0, 0, W, H);
+        }
+
+        function frame(now) {
+          const dt = Math.min(0.05, Math.max(0.0001, (now - state.lastFrame) / 1000));
+          state.lastFrame = now;
+          if (state.mode === "playing" || state.mode === "menu" || state.mode === "dead") update(dt);
+          render(now / 1000);
+          requestAnimationFrame(frame);
+        }
+
+        // ------------------------------------------------------------------ input
+
+        window.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") switchLane(-1);
+          if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") switchLane(1);
+          if (e.code === "Space" && state.mode === "menu") startGame();
+          if (e.key === "Escape") {
+            if (state.mode === "playing" || state.mode === "paused") togglePause();
+          }
+        });
+
+        let pointerStart = null;
+        window.addEventListener("pointerdown", (e) => {
+          if (e.target && e.target.closest && e.target.closest(".overlay, .mute-btn")) return;
+          ensureAudio();
+          pointerStart = { x: e.clientX, y: e.clientY, moved: false };
+        });
+        window.addEventListener("pointermove", (e) => {
+          if (!pointerStart) return;
+          const dx = e.clientX - pointerStart.x;
+          if (Math.abs(dx) > 42) {
+            switchLane(dx > 0 ? 1 : -1);
+            pointerStart = { x: e.clientX, y: e.clientY, moved: true };
+          }
+        });
+        window.addEventListener("pointerup", (e) => {
+          if (!pointerStart) return;
+          const dx = e.clientX - pointerStart.x;
+          if (!pointerStart.moved && Math.abs(dx) < 12 && state.mode === "playing") {
+            const playerX = project(state.playerLane * laneWorld, playZ).x;
+            if (e.clientX < playerX - 24) switchLane(-1);
+            else if (e.clientX > playerX + 24) switchLane(1);
+          }
+          pointerStart = null;
+        });
+        window.addEventListener("pointercancel", () => { pointerStart = null; });
+
+        $("play-btn").addEventListener("click", startGame);
+        $("again-btn").addEventListener("click", startGame);
+        $("menu-btn").addEventListener("click", goToMenu);
+        $("resume-btn").addEventListener("click", togglePause);
+        $("pause-menu-btn").addEventListener("click", goToMenu);
+        muteBtn.addEventListener("click", () => {
+          muted = !muted;
+          muteBtn.classList.toggle("muted", muted);
+          if (!muted) { ensureAudio(); tone(620, 0.08, "sine", 0.02, 800); }
+        });
+        document.addEventListener("visibilitychange", () => {
+          if (document.hidden && state.mode === "playing") togglePause();
+        });
+        window.addEventListener("resize", resize);
+
+        // ------------------------------------------------------------------- boot
+
+        layout();
+        state.mode = "menu";
+        app.dataset.mode = "menu";
+        menuEl.classList.remove("is-hidden");
+        deadEl.classList.add("is-hidden");
+        pauseEl.classList.add("is-hidden");
+        distanceEl.textContent = "0";
+        orbEl.textContent = "0";
+        bestEl.textContent = String(state.best);
+        setupBots();
+        renderLeaderboard();
+
+        requestAnimationFrame((now) => {
+          state.lastFrame = now;
+          requestAnimationFrame(frame);
+        });
+
+        if (new URLSearchParams(location.search).has("debug")) {
+          window.__neonRush = { state, CONFIG, startGame, goToMenu, endGame, switchLane, spawnRow };
+        }
+      })();
+    </script>
+  </body>
+</html>

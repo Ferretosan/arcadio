@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#eef4fc" />
+    <title>Blob Battle</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='34' r='26' fill='%23ff5a7a'/%3E%3Cellipse cx='23' cy='29' rx='6' ry='7' fill='white'/%3E%3Cellipse cx='41' cy='29' rx='6' ry='7' fill='white'/%3E%3Ccircle cx='23' cy='30' r='3' fill='%2325314a'/%3E%3Ccircle cx='41' cy='30' r='3' fill='%2325314a'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app" data-mode="menu">
+      <canvas id="game" aria-label="Blob Battle arena"></canvas>
+
+      <div class="hud" id="hud">
+        <div class="stats-card">
+          <div class="mass-block">
+            <span id="mass-value">30</span>
+            <span class="mass-label">MASS</span>
+          </div>
+          <div class="stats-bottom">
+            <span>Best <b id="best-value">30</b></span>
+            <span class="sep"></span>
+            <span>Eaten <b id="kills-value">0</b></span>
+          </div>
+        </div>
+
+        <aside class="leaderboard">
+          <div class="lb-head">
+            <span class="lb-title">Leaderboard</span>
+            <span class="lb-rank" id="player-rank"></span>
+          </div>
+          <ol id="lb-list"></ol>
+        </aside>
+
+        <div class="feed" id="feed" aria-live="polite"></div>
+
+        <div class="hint" id="hint">
+          <span><b>Mouse</b> move</span>
+          <span><b>Space</b> split</span>
+          <span><b>W</b> eject</span>
+        </div>
+
+        <div class="touch-controls" id="touch-controls">
+          <button class="touch-btn" id="btn-eject" aria-label="Eject mass">•••</button>
+          <button class="touch-btn touch-btn-main" id="btn-split" aria-label="Split">SPLIT</button>
+        </div>
+      </div>
+
+      <button class="mute-btn" id="mute-btn" aria-label="Toggle sound" title="Toggle sound">
+        <svg class="icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+
+      <div class="overlay menu-overlay" id="menu">
+        <div class="bg-blobs" aria-hidden="true">
+          <span class="bg-blob b1"></span>
+          <span class="bg-blob b2"></span>
+          <span class="bg-blob b3"></span>
+          <span class="bg-blob b4"></span>
+          <span class="bg-blob b5"></span>
+        </div>
+
+        <div class="menu-card">
+          <div class="logo-blob" aria-hidden="true">
+            <span class="logo-eye"><i></i></span>
+            <span class="logo-eye"><i></i></span>
+            <span class="logo-mouth"></span>
+          </div>
+          <h1>BLOB <span>BATTLE</span></h1>
+          <p class="tagline">Eat. Grow. Dominate the arena.</p>
+
+          <form id="play-form" autocomplete="off">
+            <label for="name-input">Your blob name</label>
+            <input id="name-input" name="name" type="text" maxlength="14" placeholder="Enter a name..." spellcheck="false" />
+            <div class="color-row" id="color-row" role="group" aria-label="Blob color"></div>
+            <button class="play-btn" type="submit">PLAY</button>
+          </form>
+
+          <div class="controls-row">
+            <span class="controls-mouse"><b>Mouse</b> move</span>
+            <span class="controls-mouse"><b>Space</b> split</span>
+            <span class="controls-mouse"><b>W</b> eject</span>
+            <span class="touch-only"><b>Drag</b> move</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="overlay dead-overlay is-hidden" id="dead">
+        <div class="dead-card">
+          <div class="dead-blob" aria-hidden="true">
+            <span class="dead-eye"><i></i></span>
+            <span class="dead-eye"><i></i></span>
+          </div>
+          <h2>You got eaten!</h2>
+          <p class="dead-sub" id="dead-sub">A bigger blob got the better of you.</p>
+
+          <div class="dead-stats">
+            <div><span>Peak mass</span><b id="stat-mass">30</b></div>
+            <div><span>Rank</span><b id="stat-rank">#1</b></div>
+            <div><span>Survived</span><b id="stat-time">0s</b></div>
+            <div><span>Blobs eaten</span><b id="stat-kills">0</b></div>
+          </div>
+
+          <button class="play-btn" id="again-btn" type="button">PLAY AGAIN</button>
+          <button class="ghost-btn" id="menu-btn" type="button">Main menu</button>
+        </div>
+      </div>
+
+      <div class="overlay pause-overlay is-hidden" id="pause">
+        <div class="pause-card">
+          <h2>Paused</h2>
+          <p>Take a breath. The blobs will wait.</p>
+          <button class="play-btn" id="resume-btn" type="button">RESUME</button>
+          <button class="ghost-btn" id="pause-menu-btn" type="button">Main menu</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="game.js"></script>
+  </body>
+</html>

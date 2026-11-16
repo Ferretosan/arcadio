@@ -1,12 +1,16 @@
 {
   "sections": [
     {
-      "title": "New Games",
-      "tag": "new"
+      "title": "Featured",
+      "tag": "featured"
     },
     {
       "title": "arcadio+ Originals",
       "tag": "arcadio"
+    },
+    {
+      "title": "New Games",
+      "tag": "new"
     },
     {
       "title": "All games",
@@ -86,13 +90,14 @@
         "casual",
         "arcadio",
         "all"
-      ]
+      ],
+      "hidden": true
     },
     {
       "id": "avoid-the-blocks-2",
       "title": "Avoid the Blocks 2",
       "url": "games/avoid-the-blocks-2/index.html",
-      "thumbnail": "games/avoid-the-blocks-2/thumbnail.png",
+      "thumbnail": "newicons/avoid the blocks 2.png",
       "tags": [
         "arcade",
         "casual",
@@ -187,6 +192,21 @@
         "all"
       ],
       "thumbnail": "newicons/black hole square.jpg"
+    },
+    {
+      "id": "blob-battle",
+      "title": "Blob Battle",
+      "url": "games/blob-battle/index.html",
+      "tags": [
+        "io",
+        "action",
+        "casual",
+        "multiplayer",
+        "arcadio",
+        "new",
+        "all"
+      ],
+      "thumbnail": "newicons/blob battle.png"
     },
     {
       "id": "bounceback",
@@ -299,6 +319,21 @@
         "all"
       ],
       "thumbnail": "newicons/clicker heroes.jpg"
+    },
+    {
+      "id": "cloud-hop",
+      "title": "Cloud Hop",
+      "url": "games/cloud-hop/index.html",
+      "tags": [
+        "platformer",
+        "arcade",
+        "casual",
+        "arcadio",
+        "io",
+        "new",
+        "all"
+      ],
+      "thumbnail": "newicons/cloud hop.png"
     },
     {
       "id": "clusterrush",
@@ -742,6 +777,18 @@
       "thumbnail": "newicons/highway traffic.jpg"
     },
     {
+      "id": "kick-the-dummy",
+      "title": "Kick the Dummy",
+      "url": "games/kick-the-dummy/index.html",
+      "tags": [
+        "action",
+        "clicker",
+        "casual",
+        "all"
+      ],
+      "thumbnail": "newicons/kick the dummy.png"
+    },
+    {
       "id": "konnekt",
       "title": "Konnekt",
       "url": "games/konnekt/index.html",
@@ -870,6 +917,22 @@
       ]
     },
     {
+      "id": "neon-rush",
+      "title": "Neon Rush",
+      "url": "games/neon-rush/index.html",
+      "tags": [
+        "runner",
+        "arcade",
+        "action",
+        "casual",
+        "arcadio",
+        "io",
+        "new",
+        "all"
+      ],
+      "thumbnail": "newicons/neon rush.png"
+    },
+    {
       "id": "ninjavsevilcorp",
       "title": "Ninja vs Evil Corp",
       "url": "games/ninjavsevilcorp/index.html",
@@ -916,7 +979,7 @@
     },
     {
       "id": "paperio",
-      "title": "Paper.io",
+      "title": "Paper.io 2",
       "url": "games/paperio/index.html",
       "tags": [
         "io",
@@ -924,7 +987,7 @@
         "casual",
         "all"
       ],
-      "thumbnail": "newicons/paper.io.jpg"
+      "thumbnail": "newicons/paper.io 2.jpg"
     },
     {
       "id": "particleclicker",
@@ -1118,6 +1181,20 @@
         "all"
       ],
       "thumbnail": "newicons/sketchbook 04.png"
+    },
+    {
+      "id": "sky-stacker",
+      "title": "Sky Stacker",
+      "url": "games/sky-stacker/index.html",
+      "tags": [
+        "arcade",
+        "casual",
+        "arcadio",
+        "io",
+        "new",
+        "all"
+      ],
+      "thumbnail": "newicons/sky stacker.png"
     },
     {
       "id": "sleepingbeauty",
@@ -1315,6 +1392,22 @@
         "all"
       ],
       "thumbnail": "newicons/subway surfers singapore.webp"
+    },
+    {
+      "id": "sumo-shuffle",
+      "title": "Sumo Shuffle",
+      "url": "games/sumo-shuffle/index.html",
+      "tags": [
+        "action",
+        "arcade",
+        "casual",
+        "multiplayer",
+        "arcadio",
+        "io",
+        "new",
+        "all"
+      ],
+      "thumbnail": "newicons/sumo shuffle.png"
     },
     {
       "id": "tanukisunset",
@@ -1555,10 +1648,12 @@
       "tags": [
         "arcade",
         "casual",
+        "featured",
         "new",
         "all"
       ],
-      "thumbnail": "games/slide-down/favicon.png"
+      "thumbnail": "games/slide-down/favicon.png",
+      "cover": "covers/slide down.jpg"
     },
     {
       "id": "slice-master",
@@ -1568,10 +1663,28 @@
         "arcade",
         "casual",
         "action",
+        "featured",
         "new",
         "all"
       ],
-      "thumbnail": "games/slice-master-standalone/thumbnail.jpg"
+      "thumbnail": "games/slice-master-standalone/thumbnail.jpg",
+      "cover": "covers/slice master.jpg"
+    },
+    {
+      "id": "idlebreakout",
+      "title": "Idle Breakout",
+      "url": "games/idlebreakout/index.html",
+      "tags": [
+        "idle",
+        "clicker",
+        "arcade",
+        "classic",
+        "featured",
+        "new",
+        "all"
+      ],
+      "thumbnail": "games/idlebreakout/img/thumbnail.png",
+      "cover": "covers/idle breakout.jpg"
     }
   ]
 }

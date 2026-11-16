@@ -1,0 +1,1222 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#8fd4ff" />
+    <title>Cloud Hop</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%238fd4ff'/%3E%3Ccircle cx='32' cy='36' r='18' fill='%23ff7a9c'/%3E%3Cellipse cx='25' cy='32' rx='4' ry='5' fill='white'/%3E%3Cellipse cx='39' cy='32' rx='4' ry='5' fill='white'/%3E%3Ccircle cx='25' cy='33' r='2' fill='%2325314a'/%3E%3Ccircle cx='39' cy='33' r='2' fill='%2325314a'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+      * { box-sizing: border-box; }
+      html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+      body {
+        font-family: "Nunito", "Segoe UI", sans-serif;
+        background: #8fd4ff;
+        color: #17324c;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+      #app { position: fixed; inset: 0; }
+      .hud { position: absolute; inset: 0; pointer-events: none; }
+      .hud-card {
+        position: absolute; top: 16px; left: 16px;
+        min-width: 178px; padding: 13px 16px 11px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.82);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 14px 35px rgba(30, 92, 140, 0.16);
+        backdrop-filter: blur(14px);
+      }
+      .score-row { display: flex; align-items: flex-end; gap: 7px; }
+      .score-num { font-family: "Baloo 2", sans-serif; font-size: 44px; font-weight: 800; line-height: 0.95; letter-spacing: -1px; }
+      .score-unit { font-size: 13px; font-weight: 900; color: #6c88a4; padding-bottom: 6px; }
+      .score-sub { display: flex; gap: 13px; margin-top: 7px; font-size: 12px; font-weight: 800; color: #6c88a4; }
+      .score-sub b { color: #17324c; }
+      .leaderboard {
+        position: absolute; top: 16px; right: 16px; width: 194px;
+        padding: 11px 13px 9px; border-radius: 18px;
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 14px 35px rgba(30, 92, 140, 0.14);
+        backdrop-filter: blur(14px);
+      }
+      .lb-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
+      .lb-title { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 900; color: #728ca7; }
+      .lb-rank { font-family: "Baloo 2", sans-serif; font-weight: 800; color: #ff6b8a; font-size: 14px; }
+      #lb-list { list-style: none; margin: 0; padding: 0; }
+      #lb-list li { display: grid; grid-template-columns: 16px 9px 1fr auto; align-items: center; gap: 6px; padding: 2.5px 0; font-size: 11.5px; font-weight: 800; color: #49647f; }
+      #lb-list li.me { color: #17324c; }
+      .lb-num { color: #93a9be; font-size: 10px; text-align: right; }
+      .lb-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot, #999); }
+      .lb-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .lb-mass { color: #7f97ad; font-size: 10.5px; }
+      li.me .lb-mass { color: #ff5a7a; }
+      .feed { position: absolute; left: 16px; bottom: 76px; display: flex; flex-direction: column; gap: 6px; max-width: 46vw; }
+      .feed-line {
+        padding: 6px 11px; border-radius: 11px; width: fit-content;
+        background: rgba(23, 50, 76, 0.55); color: #fff;
+        font-size: 11.5px; font-weight: 700; backdrop-filter: blur(6px);
+        animation: feedIn 0.3s ease both;
+      }
+      .feed-line.fade { opacity: 0; transition: opacity 0.4s ease; }
+      @keyframes feedIn { from { opacity: 0; transform: translateY(8px); } }
+      .hint {
+        position: absolute; left: 50%; bottom: 44px; transform: translateX(-50%);
+        display: flex; gap: 14px; padding: 7px 14px; border-radius: 999px;
+        background: rgba(23, 50, 76, 0.38); color: #fff; font-size: 11px; font-weight: 800;
+        backdrop-filter: blur(6px); transition: opacity 0.6s ease; white-space: nowrap;
+      }
+      .hint.fade { opacity: 0; }
+      .hint b { color: #ffe08a; }
+      .mute-btn {
+        position: absolute; top: 16px; left: 214px; width: 38px; height: 38px;
+        border: 1px solid rgba(255,255,255,0.9); border-radius: 50%;
+        background: rgba(255,255,255,0.78); color: #38536e; cursor: pointer;
+        display: grid; place-items: center; backdrop-filter: blur(10px);
+        box-shadow: 0 8px 20px rgba(30, 92, 140, 0.14); pointer-events: auto;
+      }
+      .mute-btn svg { width: 18px; height: 18px; fill: currentColor; }
+      .mute-btn .icon-off { display: none; }
+      .mute-btn.muted .icon-on { display: none; }
+      .mute-btn.muted .icon-off { display: block; }
+      .overlay {
+        position: absolute; inset: 0; display: grid; place-items: center;
+        padding: 18px; background: rgba(44, 91, 128, 0.28);
+        backdrop-filter: blur(7px); z-index: 10;
+      }
+      .overlay.is-hidden { display: none; }
+      .card {
+        width: min(400px, 94vw); padding: 30px 28px 24px; text-align: center;
+        border-radius: 30px; background: rgba(255, 255, 255, 0.94);
+        border: 1px solid #fff; box-shadow: 0 30px 70px rgba(20, 66, 104, 0.34);
+        animation: cardIn 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+      }
+      @keyframes cardIn { from { opacity: 0; transform: translateY(14px) scale(0.97); } }
+      .mascot { position: relative; width: 92px; height: 92px; margin: 0 auto 6px; }
+      .mascot .body {
+        position: absolute; inset: 8px; border-radius: 46% 54% 50% 50% / 52% 48% 54% 46%;
+        background: radial-gradient(circle at 34% 30%, #ffb3c3, #ff5a7a 55%, #d92e56);
+        box-shadow: 0 12px 24px rgba(217, 46, 86, 0.26);
+        animation: bob 2.6s ease-in-out infinite;
+      }
+      @keyframes bob { 50% { transform: translateY(-5px) rotate(-2deg); } }
+      .mascot .eye { position: absolute; top: 36px; width: 20px; height: 24px; border-radius: 50%; background: #fff; }
+      .mascot .eye.l { left: 22px; } .mascot .eye.r { right: 22px; }
+      .mascot .eye i { position: absolute; left: 6px; top: 8px; width: 9px; height: 11px; border-radius: 50%; background: #25314a; }
+      .mascot .cheek { position: absolute; top: 52px; width: 12px; height: 7px; border-radius: 50%; background: rgba(255, 255, 255, 0.45); }
+      .mascot .cheek.l { left: 8px; } .mascot .cheek.r { right: 8px; }
+      .mascot .cloud { position: absolute; inset: auto 0 -4px; height: 26px; border-radius: 999px; background: #fff; box-shadow: 0 6px 16px rgba(80, 140, 180, 0.18); }
+      h1 { font-family: "Baloo 2", sans-serif; font-size: 40px; line-height: 1; margin: 8px 0 2px; letter-spacing: -1px; }
+      h1 span { color: #ff5a7a; }
+      .tagline { margin: 0 0 18px; color: #6c88a4; font-size: 13.5px; font-weight: 700; }
+      .play-btn {
+        width: 100%; padding: 14px 18px; border: 0; border-radius: 16px; cursor: pointer;
+        background: linear-gradient(180deg, #ff7d98, #ff4f73);
+        box-shadow: 0 10px 20px rgba(255, 79, 115, 0.34), inset 0 1px 0 rgba(255,255,255,0.5);
+        color: #fff; font-family: "Baloo 2", sans-serif; font-size: 20px; font-weight: 800;
+        letter-spacing: 0.06em; transition: transform 0.12s ease, box-shadow 0.12s ease;
+      }
+      .play-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 26px rgba(255, 79, 115, 0.4); }
+      .play-btn:active { transform: translateY(0); }
+      .ghost-btn { width: 100%; margin-top: 9px; padding: 10px; border: 0; border-radius: 13px; background: transparent; color: #6c88a4; font-family: "Nunito", sans-serif; font-size: 13px; font-weight: 900; cursor: pointer; }
+      .ghost-btn:hover { background: #eef6fd; color: #17324c; }
+      .controls-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 7px; }
+      .controls-row span { padding: 5px 9px; border-radius: 8px; background: #eff7fe; color: #55718d; font-size: 10.5px; font-weight: 800; }
+      .controls-row b { color: #17324c; }
+      .dead-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 16px 0 18px; }
+      .dead-stats div { background: #f0f8ff; border-radius: 13px; padding: 9px; }
+      .dead-stats span { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.09em; font-weight: 900; color: #8ba4ba; }
+      .dead-stats b { font-family: "Baloo 2", sans-serif; font-size: 23px; color: #17324c; }
+      .dead-card h2, .pause-card h2 { font-family: "Baloo 2", sans-serif; font-size: 30px; margin: 4px 0 4px; }
+      .dead-card p, .pause-card p { margin: 0; color: #6c88a4; font-size: 13px; font-weight: 700; }
+      .touch-only { display: none; }
+      @media (max-width: 720px) {
+        .hud-card { top: 10px; left: 10px; min-width: 134px; padding: 10px 12px 9px; }
+        .score-num { font-size: 34px; }
+        .leaderboard { top: 10px; right: 10px; width: 145px; padding: 8px 10px 6px; }
+        #lb-list li { font-size: 10px; grid-template-columns: 13px 7px 1fr auto; gap: 4px; }
+        .mute-btn { top: 10px; left: auto; right: 163px; width: 34px; height: 34px; }
+        .feed { left: 10px; bottom: 70px; max-width: 62vw; }
+        .feed-line { font-size: 10.5px; }
+        .hint { bottom: 16px; font-size: 10px; gap: 9px; padding: 6px 11px; }
+        .touch-only { display: inline; }
+        .desktop-only { display: none; }
+        h1 { font-size: 34px; }
+        .card { padding: 24px 20px 18px; }
+      }
+      @media (max-width: 430px) {
+        .leaderboard { width: 126px; }
+        .lb-mass { display: none; }
+        .mute-btn { right: 143px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" data-mode="menu">
+      <canvas id="game" aria-label="Cloud Hop climbing game"></canvas>
+
+      <div class="hud">
+        <div class="hud-card">
+          <div class="score-row">
+            <span class="score-num" id="height-value">0</span>
+            <span class="score-unit">m</span>
+          </div>
+          <div class="score-sub">
+            <span>Best <b id="best-value">0</b></span>
+            <span>Stars <b id="stars-value">0</b></span>
+          </div>
+        </div>
+
+        <aside class="leaderboard">
+          <div class="lb-head"><span class="lb-title">Top climbers</span><span class="lb-rank" id="player-rank"></span></div>
+          <ol id="lb-list"></ol>
+        </aside>
+
+        <div class="feed" id="feed" aria-live="polite"></div>
+
+        <div class="hint" id="hint">
+          <span class="desktop-only"><b>← →</b> move</span>
+          <span class="touch-only"><b>Drag</b> to steer</span>
+          <span class="desktop-only"><b>Esc</b> pause</span>
+        </div>
+      </div>
+
+      <button class="mute-btn" id="mute-btn" aria-label="Toggle sound" title="Toggle sound">
+        <svg class="icon-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="icon-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+
+      <div class="overlay" id="menu">
+        <div class="card">
+          <div class="mascot" aria-hidden="true">
+            <span class="body"></span>
+            <span class="eye l"><i></i></span>
+            <span class="eye r"><i></i></span>
+            <span class="cheek l"></span><span class="cheek r"></span>
+            <span class="cloud"></span>
+          </div>
+          <h1>CLOUD <span>HOP</span></h1>
+          <p class="tagline">Bounce skyward, catch stars, don't look down.</p>
+          <button class="play-btn" id="play-btn" type="button">PLAY</button>
+          <div class="controls-row">
+            <span class="desktop-only"><b>← →</b> / A D move</span>
+            <span class="touch-only"><b>Drag</b> to steer</span>
+            <span><b>Auto</b> bounce</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="overlay is-hidden" id="dead">
+        <div class="card dead-card">
+          <h2>You fell!</h2>
+          <p id="dead-sub">The clouds will miss you.</p>
+          <div class="dead-stats">
+            <div><span>Height</span><b id="stat-height">0 m</b></div>
+            <div><span>Rank</span><b id="stat-rank">#1</b></div>
+            <div><span>Stars</span><b id="stat-stars">0</b></div>
+            <div><span>Best</span><b id="stat-best">0 m</b></div>
+          </div>
+          <button class="play-btn" id="again-btn" type="button">CLIMB AGAIN</button>
+          <button class="ghost-btn" id="menu-btn" type="button">Main menu</button>
+        </div>
+      </div>
+
+      <div class="overlay is-hidden" id="pause">
+        <div class="card pause-card">
+          <h2>Paused</h2>
+          <p>The sky can wait a moment.</p>
+          <div style="height:14px"></div>
+          <button class="play-btn" id="resume-btn" type="button">RESUME</button>
+          <button class="ghost-btn" id="pause-menu-btn" type="button">Main menu</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (() => {
+        "use strict";
+
+        const $ = (id) => document.getElementById(id);
+        const canvas = $("game");
+        const ctx = canvas.getContext("2d");
+        const app = $("app");
+        const feedEl = $("feed");
+        const heightEl = $("height-value");
+        const bestEl = $("best-value");
+        const starsEl = $("stars-value");
+        const lbListEl = $("lb-list");
+        const playerRankEl = $("player-rank");
+        const hintEl = $("hint");
+        const menuEl = $("menu");
+        const deadEl = $("dead");
+        const pauseEl = $("pause");
+        const muteBtn = $("mute-btn");
+
+        const CONFIG = {
+          gravity: 1500,
+          jump: 570,
+          springJump: 790,
+          moveAccel: 2200,
+          maxSpeed: 340,
+          gapMin: 60,
+          gapMax: 98,
+          springGapMin: 126,
+          springGapMax: 184,
+          bestKey: "cloud-hop-best",
+        };
+
+        const PALETTE = ["#ff5a7a", "#3aa7ff", "#2fc98d", "#ffa62b", "#9b6cff", "#22c9d6", "#f45bb5", "#ffd23f"];
+        const BOT_NAMES = ["Mochi", "Pip", "Waffles", "Ziggy", "Luna", "Nori", "Boba", "Sprout", "Toast", "Kiwi", "Peach", "Milo", "Nugget", "Jelly", "Puff", "Cleo"];
+
+        let W = window.innerWidth;
+        let H = window.innerHeight;
+        let dpr = 1;
+
+        let muted = false;
+        let audio = null;
+
+        function readStore(key) {
+          try { return window.localStorage.getItem(key); } catch (err) { return null; }
+        }
+        function writeStore(key, value) {
+          try { window.localStorage.setItem(key, value); } catch (err) {}
+        }
+
+        const state = {
+          mode: "menu",
+          time: 0,
+          lastFrame: 0,
+          pointer: { x: W / 2, active: false, touch: false },
+          keys: { left: false, right: false },
+          player: null,
+          platforms: [],
+          stars: [],
+          particles: [],
+          floaters: [],
+          clouds: [],
+          camY: 0,
+          startY: 0,
+          topY: 0,
+          maxAltitude: 0,
+          starCount: 0,
+          best: Number(readStore(CONFIG.bestKey) || 0) || 0,
+          feedTimer: 5,
+          socialTimer: 7,
+          lbTimer: 0,
+          hintTimer: 0,
+          shake: 0,
+          bots: [],
+        };
+
+        const rand = (a, b) => a + Math.random() * (b - a);
+        const pick = (arr) => arr[(Math.random() * arr.length) | 0];
+        const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+        const esc = (str) => String(str).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+
+        function ensureAudio() {
+          if (audio) return;
+          try { audio = new (window.AudioContext || window.webkitAudioContext)(); } catch (err) { audio = null; }
+        }
+
+        function tone(freq, dur, type = "sine", vol = 0.03, slideTo = 0) {
+          if (muted || !audio) return;
+          try {
+            const t = audio.currentTime;
+            const osc = audio.createOscillator();
+            const gain = audio.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, t);
+            if (slideTo) osc.frequency.exponentialRampToValueAtTime(Math.max(30, slideTo), t + dur);
+            gain.gain.setValueAtTime(vol, t);
+            gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+            osc.connect(gain).connect(audio.destination);
+            osc.start(t);
+            osc.stop(t + dur + 0.02);
+          } catch (err) {}
+        }
+
+        function makeClouds() {
+          state.clouds = [];
+          for (let i = 0; i < 16; i++) {
+            state.clouds.push({
+              x: rand(-120, W + 120),
+              y: rand(-800, 900),
+              s: rand(0.5, 1.5),
+              depth: rand(0.15, 0.6),
+              alpha: rand(0.18, 0.5),
+            });
+          }
+        }
+
+        // Level generation always works from the previous platform to the next
+        // one: vertical gaps stay under the jump apex and sideways offsets stay
+        // inside the horizontal travel available while airborne.
+        function jumpReach(gap, launchSpeed, fromWidth, toWidth) {
+          const g = CONFIG.gravity;
+          const disc = launchSpeed * launchSpeed - 2 * g * gap;
+          if (disc <= 0) return 0;
+          const airTime = (launchSpeed - Math.sqrt(disc)) / g;
+          return CONFIG.maxSpeed * airTime * 0.78 + (fromWidth + toWidth) * 0.45;
+        }
+
+        function nextMotif(difficulty) {
+          const t = clamp(difficulty / 45, 0, 1);
+          const roll = Math.random();
+          if (roll < 0.08 + t * 0.05) return "spring";
+          if (roll < 0.2 + t * 0.1) return "moving";
+          if (roll < 0.36) return "rest";
+          if (roll < 0.58) return "stair";
+          if (roll < 0.8) return "zig";
+          return "spread";
+        }
+
+        function makePlatform(y, difficulty, opts) {
+          opts = opts || {};
+          const type = opts.type || "cloud";
+          const w = opts.w != null ? opts.w : clamp(150 - difficulty * 0.16 + rand(-14, 14), 76, 166);
+          const amp = type === "moving" ? rand(26, 40) : 0;
+          const margin = w / 2 + 16 + amp;
+          const center = opts.x != null ? opts.x : rand(margin, Math.max(margin, W - margin));
+          const x = clamp(center, margin, Math.max(margin, W - margin));
+          return {
+            x,
+            y,
+            baseX: x,
+            w,
+            h: 15,
+            type,
+            dir: Math.random() < 0.5 ? -1 : 1,
+            amp,
+            phase: rand(0, 6.28),
+            squash: 0,
+          };
+        }
+
+        function addPlatform(y, opts) {
+          const difficulty = Math.max(0, (state.startY - y) / 10);
+          const p = makePlatform(y, difficulty, opts);
+          state.platforms.push(p);
+          state.topY = y;
+          return p;
+        }
+
+        function spawnNextPlatform() {
+          if (!state.gen) {
+            state.gen = { last: null, dir: Math.random() < 0.5 ? -1 : 1, steps: 0, springBoost: false };
+          }
+          const gen = state.gen;
+          const last = gen.last;
+          const difficulty = Math.max(0, (state.startY - (last ? last.y : 0)) / 10);
+          const springBoost = gen.springBoost;
+          gen.springBoost = false;
+
+          const motif = nextMotif(difficulty);
+          let gap;
+          if (springBoost) gap = rand(CONFIG.springGapMin, CONFIG.springGapMax);
+          else if (motif === "rest") gap = rand(52, 72);
+          else gap = rand(CONFIG.gapMin, CONFIG.gapMax);
+          gap = clamp(gap, 48, springBoost ? CONFIG.springGapMax : CONFIG.gapMax);
+
+          const y = last ? last.y - gap : -90;
+          let type = "cloud";
+          if (motif === "spring") type = "spring";
+          else if (motif === "moving") type = "moving";
+
+          let w = clamp(150 - difficulty * 0.16 + rand(-14, 14), 76, 166);
+          if (motif === "rest") w = clamp(w + 44, 112, 196);
+
+          const launchSpeed = last && last.type === "spring" ? CONFIG.springJump : CONFIG.jump;
+          const lastAmp = last && last.type === "moving" ? last.amp : 0;
+          const reach = Math.max(72, jumpReach(gap, launchSpeed, last ? last.w : 0, w) - lastAmp * 0.6);
+
+          if (gen.steps <= 0) {
+            gen.steps = 2 + ((Math.random() * 3) | 0);
+            gen.dir *= -1;
+          }
+          gen.steps--;
+
+          // Lateral difficulty ramps in over the first ~400m so the opening
+          // climb is forgiving and the later route can stretch further.
+          const skill = clamp(difficulty / 400, 0, 1);
+          let offset;
+          if (motif === "rest") offset = rand(-reach * (0.15 + skill * 0.25), reach * (0.15 + skill * 0.25));
+          else if (motif === "spread") offset = gen.dir * reach * rand(0.55 + skill * 0.13, 0.75 + skill * 0.19);
+          else if (motif === "stair") offset = gen.dir * reach * rand(0.3 + skill * 0.15, 0.55 + skill * 0.2);
+          else offset = gen.dir * reach * rand(0.12 + skill * 0.13, 0.35 + skill * 0.25);
+
+          const baseX = last ? last.x : W / 2;
+          let x = baseX + offset;
+          const margin = w / 2 + 18 + (type === "moving" ? 40 : 0);
+          if (x < margin || x > W - margin) {
+            gen.dir *= -1;
+            x = baseX - offset;
+          }
+          x = clamp(x, margin, Math.max(margin, W - margin));
+          if (Math.abs(x - baseX) > reach) {
+            x = baseX + Math.sign(x - baseX) * reach;
+            x = clamp(x, margin, Math.max(margin, W - margin));
+          }
+
+          const p = addPlatform(y, { x, w, type });
+
+          // Stars: an occasional arc across the gap, a cluster on rest
+          // platforms, otherwise one hovering above the platform.
+          if (last && Math.random() < 0.18 && Math.abs(p.x - last.x) > 70) {
+            for (let i = 1; i <= 3; i++) {
+              const t = i / 4;
+              state.stars.push({
+                x: last.x + (p.x - last.x) * t,
+                y: last.y + (p.y - last.y) * t - 32 - Math.sin(Math.PI * t) * 12,
+                phase: rand(0, 6.28),
+                dead: false,
+              });
+            }
+          } else if (motif === "rest") {
+            for (let i = -1; i <= 1; i++) {
+              state.stars.push({ x: p.x + i * (w * 0.26), y: y - 34, phase: rand(0, 6.28), dead: false });
+            }
+          } else if (Math.random() < 0.66) {
+            state.stars.push({ x: p.x, y: y - 34, phase: rand(0, 6.28), dead: false });
+          }
+
+          gen.last = p;
+          gen.springBoost = p.type === "spring";
+          return p;
+        }
+
+        function resetWorld() {
+          state.platforms = [];
+          state.stars = [];
+          state.particles = [];
+          state.floaters = [];
+          state.startY = 0;
+          state.topY = 0;
+          state.camY = -H * 0.62;
+          state.maxAltitude = 0;
+          state.starCount = 0;
+          state.socialTimer = 4;
+          state.feedTimer = 3;
+          state.lbTimer = 0;
+          state.hintTimer = 0;
+          state.shake = 0;
+          state.player = {
+            x: W / 2,
+            y: -18,
+            vx: 0,
+            vy: -CONFIG.jump,
+            r: 17,
+            squash: 0,
+            dead: false,
+            minY: 0,
+          };
+          // Ground platform.
+          state.platforms.push({ x: W / 2, y: 0, baseX: W / 2, w: Math.min(W * 0.7, 320), h: 20, type: "ground", dir: 1, phase: 0, squash: 0, speed: 0 });
+          state.gen = { last: null, dir: Math.random() < 0.5 ? -1 : 1, steps: 0, springBoost: false };
+          const first = addPlatform(-90, { x: W / 2, w: Math.max(130, Math.min(W * 0.5, 180)), type: "cloud" });
+          state.stars.push({ x: W / 2, y: first.y - 34, phase: rand(0, 6.28), dead: false });
+          state.gen.last = first;
+          for (let i = 0; i < 20; i++) spawnNextPlatform();
+          makeClouds();
+          setupBots();
+        }
+
+        function setupBots() {
+          state.bots = [];
+          for (let i = 0; i < 9; i++) {
+            state.bots.push({
+              name: BOT_NAMES[i % BOT_NAMES.length],
+              color: PALETTE[i % PALETTE.length],
+              height: Math.round(rand(30, 520)),
+              rate: rand(0.9, 2.4),
+            });
+          }
+          state.bots.sort((a, b) => b.height - a.height);
+        }
+
+        function startGame() {
+          ensureAudio();
+          menuEl.classList.add("is-hidden");
+          deadEl.classList.add("is-hidden");
+          pauseEl.classList.add("is-hidden");
+          app.dataset.mode = "playing";
+          state.mode = "playing";
+          resetWorld();
+          heightEl.textContent = "0";
+          bestEl.textContent = String(state.best);
+          starsEl.textContent = "0";
+          hintEl.classList.remove("fade");
+          feedEl.innerHTML = "";
+          tone(520, 0.16, "sine", 0.03, 780);
+          setTimeout(() => tone(720, 0.18, "sine", 0.025, 980), 90);
+        }
+
+        function goToMenu() {
+          state.mode = "menu";
+          app.dataset.mode = "menu";
+          menuEl.classList.remove("is-hidden");
+          deadEl.classList.add("is-hidden");
+          pauseEl.classList.add("is-hidden");
+          feedEl.innerHTML = "";
+          hintEl.classList.add("fade");
+          resetWorld();
+          state.player = null;
+          state.mode = "menu";
+          app.dataset.mode = "menu";
+          menuEl.classList.remove("is-hidden");
+          state.camY = -H * 0.35;
+          renderLeaderboard();
+        }
+
+        function togglePause() {
+          if (state.mode === "playing") {
+            state.mode = "paused";
+            app.dataset.mode = "paused";
+            pauseEl.classList.remove("is-hidden");
+          } else if (state.mode === "paused") {
+            state.mode = "playing";
+            app.dataset.mode = "playing";
+            pauseEl.classList.add("is-hidden");
+            state.lastFrame = performance.now();
+          }
+        }
+
+        function endGame() {
+          if (state.mode !== "playing") return;
+          state.mode = "dead";
+          app.dataset.mode = "dead";
+          state.shake = 1;
+          const altitude = Math.round(state.maxAltitude);
+          state.best = Math.max(state.best, altitude);
+          writeStore(CONFIG.bestKey, String(Math.round(state.best)));
+          $("dead-sub").textContent = altitude > 300 ? "So close to the stars." : "The clouds will miss you.";
+          $("stat-height").textContent = altitude + " m";
+          $("stat-rank").textContent = "#" + getRank();
+          $("stat-stars").textContent = String(state.starCount);
+          $("stat-best").textContent = Math.round(state.best) + " m";
+          hintEl.classList.add("fade");
+          deadEl.classList.remove("is-hidden");
+          tone(220, 0.5, "sawtooth", 0.04, 70);
+        }
+
+        function getRank() {
+          const altitude = state.maxAltitude;
+          let rank = 1;
+          for (const bot of state.bots) if (bot.height > altitude) rank++;
+          return rank;
+        }
+
+        function spawnBurst(x, y, color, count, power) {
+          for (let i = 0; i < count; i++) {
+            const a = rand(0, Math.PI * 2);
+            const speed = rand(power * 0.2, power);
+            state.particles.push({
+              x, y,
+              vx: Math.cos(a) * speed,
+              vy: Math.sin(a) * speed,
+              r: rand(2, 5),
+              color,
+              life: rand(0.3, 0.7),
+              maxLife: 0.7,
+            });
+          }
+        }
+
+        function addFloater(x, y, text, color) {
+          state.floaters.push({ x, y, text, color, life: 1, maxLife: 1 });
+        }
+
+        function addFeed(parts) {
+          if (state.mode === "menu") return;
+          const line = document.createElement("div");
+          line.className = "feed-line";
+          for (const part of parts) {
+            const span = document.createElement("span");
+            span.textContent = part.text;
+            if (part.color) span.style.color = part.color;
+            if (part.bold) span.style.fontWeight = "900";
+            line.appendChild(span);
+          }
+          feedEl.appendChild(line);
+          while (feedEl.children.length > 4) feedEl.removeChild(feedEl.firstElementChild);
+          setTimeout(() => {
+            line.classList.add("fade");
+            setTimeout(() => line.remove(), 420);
+          }, 5600);
+        }
+
+        function updateSocial(dt) {
+          if (state.mode !== "playing" && state.mode !== "dead") return;
+          state.socialTimer -= dt;
+          if (state.socialTimer > 0) return;
+          state.socialTimer = rand(8, 15);
+          const bot = pick(state.bots);
+          if (Math.random() < 0.55) {
+            addFeed([{ text: bot.name, color: bot.color, bold: true }, { text: ` reached ${Math.round(bot.height)}m`, color: "#dcecf7" }]);
+          } else {
+            addFeed([{ text: "Tip: ", color: "#ffe08a", bold: true }, { text: pick(TIPS), color: "#eaf4fc" }]);
+          }
+        }
+
+        const TIPS = [
+          "Hold a direction in the air to land where you want.",
+          "Gold stars are worth more than height.",
+          "Springy clouds launch you extra high.",
+          "The higher you go, the smaller the clouds get.",
+          "Falling off the bottom ends the climb.",
+        ];
+
+        function renderLeaderboard() {
+          const rows = [{ name: "You", color: "#ff5a7a", height: Math.round(state.maxAltitude), me: true }]
+            .concat(state.bots.map((b) => ({ name: b.name, color: b.color, height: Math.round(b.height) })))
+            .sort((a, b) => b.height - a.height);
+          const idx = rows.findIndex((r) => r.me);
+          playerRankEl.textContent = idx >= 0 ? "#" + (idx + 1) : "";
+          let html = "";
+          rows.slice(0, 7).forEach((r, i) => {
+            html += `<li class="${r.me ? "me" : ""}"><span class="lb-num">${i + 1}</span><span class="lb-dot" style="--dot:${r.color}"></span><span class="lb-name">${esc(r.name)}</span><span class="lb-mass">${r.height}m</span></li>`;
+          });
+          lbListEl.innerHTML = html;
+        }
+
+        function update(dt) {
+          state.time += dt;
+          state.shake = Math.max(0, state.shake - dt * 2.6);
+
+          if (state.mode === "playing") updatePlayer(dt);
+          updatePlatforms(dt);
+          updateParticles(dt);
+          updateCamera(dt);
+          updateSocial(dt);
+          updateHud(dt);
+          updateSlow(dt);
+        }
+
+        function updatePlayer(dt) {
+          const p = state.player;
+          if (!p || p.dead) return;
+
+          let dir = 0;
+          if (state.keys.left) dir -= 1;
+          if (state.keys.right) dir += 1;
+
+          if (state.pointer.active) {
+            const dx = state.pointer.x - p.x;
+            dir = clamp(dx / 70, -1, 1);
+          }
+
+          if (dir !== 0) {
+            p.vx += dir * CONFIG.moveAccel * dt;
+          } else {
+            p.vx *= Math.exp(-dt * 3.4);
+          }
+          p.vx = clamp(p.vx, -CONFIG.maxSpeed, CONFIG.maxSpeed);
+
+          p.vy += CONFIG.gravity * dt;
+          p.vy = Math.min(p.vy, 1050);
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
+
+          if (p.x < p.r) { p.x = p.r; p.vx *= -0.35; }
+          if (p.x > W - p.r) { p.x = W - p.r; p.vx *= -0.35; }
+
+          if (p.vy > 0) {
+            for (const platform of state.platforms) {
+              const top = platform.y - platform.h / 2;
+              if (p.x + p.r * 0.55 < platform.x - platform.w / 2) continue;
+              if (p.x - p.r * 0.55 > platform.x + platform.w / 2) continue;
+              const prevBottom = p.y - p.vy * dt + p.r;
+              const bottom = p.y + p.r;
+              if (prevBottom <= top + 2 && bottom >= top) {
+                p.y = top - p.r;
+                p.vy = -(platform.type === "spring" ? CONFIG.springJump : CONFIG.jump);
+                p.squash = 0.55;
+                platform.squash = 0.7;
+                spawnBurst(p.x, p.y + p.r, platform.type === "spring" ? "#7fd8a6" : "#d8ecff", 5, 90);
+                tone(platform.type === "spring" ? 680 : 420, 0.07, "sine", 0.022, platform.type === "spring" ? 980 : 560);
+                break;
+              }
+            }
+          }
+
+          p.squash = Math.max(0, p.squash - dt * 3.5);
+          p.minY = Math.min(p.minY, p.y);
+          const altitude = Math.max(0, (state.startY - p.minY) / 10);
+          if (altitude > state.maxAltitude) state.maxAltitude = altitude;
+
+          // Stars.
+          for (const star of state.stars) {
+            if (star.dead) continue;
+            const dx = star.x - p.x;
+            const dy = star.y - p.y;
+            if (dx * dx + dy * dy < (p.r + 15) * (p.r + 15)) {
+              star.dead = true;
+              state.starCount++;
+              spawnBurst(star.x, star.y, "#ffd23f", 9, 130);
+              addFloater(star.x, star.y, "+1", "#e0a400");
+              tone(760 + Math.random() * 90, 0.1, "sine", 0.02, 1100);
+            }
+          }
+
+          if (p.y - state.camY > H + 60) {
+            p.dead = true;
+            endGame();
+          }
+        }
+
+        function updatePlatforms(dt) {
+          for (const platform of state.platforms) {
+            platform.squash = Math.max(0, platform.squash - dt * 3.2);
+            if (platform.type === "moving") {
+              platform.phase += dt;
+              const amp = platform.amp || 0;
+              const margin = platform.w / 2 + 10 + amp;
+              platform.baseX = clamp(platform.baseX, margin, Math.max(margin, W - margin));
+              platform.x = platform.baseX + Math.sin(platform.phase * 0.9) * amp;
+            }
+          }
+        }
+
+        function updateParticles(dt) {
+          for (let i = state.particles.length - 1; i >= 0; i--) {
+            const p = state.particles[i];
+            p.life -= dt;
+            if (p.life <= 0) { state.particles.splice(i, 1); continue; }
+            p.x += p.vx * dt;
+            p.y += p.vy * dt;
+            const decay = Math.exp(-dt * 2.6);
+            p.vx *= decay;
+            p.vy *= decay;
+          }
+          for (let i = state.floaters.length - 1; i >= 0; i--) {
+            const f = state.floaters[i];
+            f.life -= dt;
+            if (f.life <= 0) { state.floaters.splice(i, 1); continue; }
+            f.y -= 30 * dt;
+          }
+
+          // Cull platforms and stars left far below.
+          for (let i = state.platforms.length - 1; i >= 0; i--) {
+            if (state.platforms[i].y > state.camY + H + 260) state.platforms.splice(i, 1);
+          }
+          for (let i = state.stars.length - 1; i >= 0; i--) {
+            if (state.stars[i].dead || state.stars[i].y > state.camY + H + 260) state.stars.splice(i, 1);
+          }
+        }
+
+        function updateCamera(dt) {
+          if (state.mode === "menu") {
+            state.camY += (Math.sin(state.time * 0.12) * 24 - H * 0.32 - state.camY) * (1 - Math.exp(-dt * 2));
+            return;
+          }
+          if (!state.player) return;
+          const target = state.player.y - H * 0.62;
+          if (target < state.camY) {
+            state.camY += (target - state.camY) * (1 - Math.exp(-dt * 6.5));
+          }
+          // Keep generating clouds above.
+          while (state.topY > state.camY - H * 1.3) spawnNextPlatform();
+        }
+
+        function updateHud(dt) {
+          state.hintTimer += dt;
+          if (state.hintTimer > 12) hintEl.classList.add("fade");
+
+          state.feedTimer -= dt;
+          state.lbTimer -= dt;
+          const altitude = Math.round(state.maxAltitude);
+          heightEl.textContent = String(altitude);
+          starsEl.textContent = String(state.starCount);
+          bestEl.textContent = String(Math.round(Math.max(state.best, altitude)));
+          if (state.lbTimer <= 0) {
+            state.lbTimer = 0.4;
+            renderLeaderboard();
+          }
+        }
+
+        function updateSlow(dt) {
+          state.feedTimer -= dt;
+          if (state.feedTimer > 0) return;
+          state.feedTimer = rand(8, 15);
+          const bot = pick(state.bots);
+          bot.height += rand(8, 34);
+          if (Math.random() < 0.6) addFeed([{ text: bot.name, color: bot.color, bold: true }, { text: ` passed ${Math.round(bot.height)}m`, color: "#dcecf7" }]);
+        }
+
+        // ------------------------------------------------------------- rendering
+
+        function resize() {
+          W = window.innerWidth;
+          H = window.innerHeight;
+          dpr = Math.min(1.5, window.devicePixelRatio || 1);
+          canvas.width = Math.round(W * dpr);
+          canvas.height = Math.round(H * dpr);
+          canvas.style.width = W + "px";
+          canvas.style.height = H + "px";
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          bgGradient = null;
+          // Keep existing platforms inside the new width after a resize or
+          // orientation change.
+          for (const platform of state.platforms) {
+            const amp = platform.amp || 0;
+            const margin = platform.w / 2 + 10 + amp;
+            platform.baseX = clamp(platform.baseX, margin, Math.max(margin, W - margin));
+            platform.x = platform.baseX + (platform.type === "moving" ? Math.sin(platform.phase * 0.9) * amp : 0);
+          }
+          if (state.mode === "menu") state.camY = -H * 0.32;
+        }
+
+        let bgGradient = null;
+
+        function drawBackground(t) {
+          if (!bgGradient) {
+            bgGradient = ctx.createLinearGradient(0, 0, 0, H);
+            bgGradient.addColorStop(0, "#5bb9ef");
+            bgGradient.addColorStop(0.45, "#9fdcff");
+            bgGradient.addColorStop(1, "#e6f7ff");
+          }
+          ctx.fillStyle = bgGradient;
+          ctx.fillRect(0, 0, W, H);
+
+          // Sun.
+          ctx.beginPath();
+          ctx.arc(W * 0.78, H * 0.17, 58, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(255, 246, 189, 0.8)";
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(W * 0.78, H * 0.17, 40, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(255, 252, 220, 0.9)";
+          ctx.fill();
+
+          const span = H + 520;
+          for (const c of state.clouds) {
+            const raw = c.y - state.camY * c.depth + Math.sin(t * 0.18 + c.x) * 6;
+            const y = (((raw + 260) % span) + span) % span - 260;
+            drawCloud(c.x, y, c.s, c.alpha);
+          }
+
+          // Parallax hills.
+          ctx.fillStyle = "rgba(127, 203, 235, 0.35)";
+          ctx.beginPath();
+          const base = H + 30;
+          ctx.moveTo(0, base);
+          for (let x = 0; x <= W; x += 80) {
+            const y = base - 70 - Math.sin((x + state.camY * 0.12) * 0.006) * 55;
+            ctx.lineTo(x, y);
+          }
+          ctx.lineTo(W, base);
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        function drawCloud(x, y, s, alpha) {
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = "#fff";
+          ctx.beginPath();
+          ctx.ellipse(x, y, 52 * s, 20 * s, 0, 0, Math.PI * 2);
+          ctx.arc(x - 30 * s, y - 10 * s, 22 * s, 0, Math.PI * 2);
+          ctx.arc(x + 6 * s, y - 20 * s, 28 * s, 0, Math.PI * 2);
+          ctx.arc(x + 40 * s, y - 8 * s, 20 * s, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        function drawAltitudeMarks() {
+          const start = Math.floor((state.camY - 100) / 1000) * 1000;
+          for (let y = start; y < state.camY + H + 100; y += 1000) {
+            if (y > 0) continue;
+            const altitude = Math.round((state.startY - y) / 10);
+            if (altitude <= 0) continue;
+            const sy = y - state.camY;
+            ctx.strokeStyle = "rgba(255,255,255,0.28)";
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 8]);
+            ctx.beginPath();
+            ctx.moveTo(0, sy);
+            ctx.lineTo(W, sy);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.fillStyle = "rgba(30, 83, 122, 0.3)";
+            ctx.font = '800 11px "Nunito", sans-serif';
+            ctx.textAlign = "left";
+            ctx.textBaseline = "bottom";
+            ctx.fillText(altitude + " m", 12, sy - 4);
+          }
+        }
+
+        function drawPlatform(platform, t) {
+          const sy = platform.y - state.camY;
+          if (sy < -80 || sy > H + 80) return;
+          const squash = platform.squash || 0;
+          const w = platform.w * (1 + squash * 0.1);
+          const h = platform.h * (1 - squash * 0.35);
+          const x = platform.x - w / 2;
+          const y = sy - h / 2;
+          const r = h / 2;
+
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.beginPath();
+          if (ctx.roundRect) ctx.roundRect(0, 0, w, h, r);
+          else {
+            ctx.moveTo(r, 0); ctx.lineTo(w - r, 0); ctx.quadraticCurveTo(w, 0, w, r);
+            ctx.lineTo(w, h - r); ctx.quadraticCurveTo(w, h, w - r, h);
+            ctx.lineTo(r, h); ctx.quadraticCurveTo(0, h, 0, h - r);
+            ctx.lineTo(0, r); ctx.quadraticCurveTo(0, 0, r, 0);
+          }
+          let grad;
+          if (platform.type === "spring") {
+            grad = ctx.createLinearGradient(0, 0, 0, h);
+            grad.addColorStop(0, "#a5f3cf");
+            grad.addColorStop(1, "#2fc98d");
+          } else if (platform.type === "ground") {
+            grad = ctx.createLinearGradient(0, 0, 0, h);
+            grad.addColorStop(0, "#fff8e8");
+            grad.addColorStop(1, "#e8f5ff");
+          } else {
+            grad = ctx.createLinearGradient(0, 0, 0, h);
+            grad.addColorStop(0, "#ffffff");
+            grad.addColorStop(1, "#d8eeff");
+          }
+          ctx.fillStyle = grad;
+          ctx.fill();
+          ctx.strokeStyle = "rgba(96, 154, 196, 0.22)";
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+
+          if (platform.type === "spring") {
+            ctx.strokeStyle = "rgba(20, 130, 91, 0.35)";
+            ctx.lineWidth = 2;
+            for (let i = 1; i < 4; i++) {
+              ctx.beginPath();
+              ctx.moveTo((w / 4) * i, h * 0.25);
+              ctx.lineTo((w / 4) * i, h * 0.75);
+              ctx.stroke();
+            }
+          }
+          if (platform.type === "moving") {
+            ctx.fillStyle = "rgba(50, 120, 170, 0.25)";
+            ctx.beginPath();
+            ctx.arc(w / 2, h / 2, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        }
+
+        function drawStar(star, t) {
+          const sy = star.y - state.camY;
+          if (sy < -50 || sy > H + 50) return;
+          const pulse = 1 + Math.sin(t * 3 + star.phase) * 0.09;
+          ctx.save();
+          ctx.translate(star.x, sy);
+          ctx.rotate(t * 0.7 + star.phase);
+          ctx.scale(pulse, pulse);
+          ctx.beginPath();
+          for (let i = 0; i < 10; i++) {
+            const a = (i / 10) * Math.PI * 2 - Math.PI / 2;
+            const r = i % 2 === 0 ? 12 : 5.5;
+            const x = Math.cos(a) * r;
+            const y = Math.sin(a) * r;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+          ctx.fillStyle = "#ffd23f";
+          ctx.shadowColor = "rgba(255, 210, 63, 0.8)";
+          ctx.shadowBlur = 14;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          ctx.strokeStyle = "rgba(201, 148, 0, 0.35)";
+          ctx.lineWidth = 1.4;
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        function drawPlayer(t) {
+          const p = state.player;
+          if (!p) return;
+          const sy = p.y - state.camY;
+          const squashX = 1 + p.squash * 0.14;
+          const squashY = 1 - p.squash * 0.18;
+          ctx.save();
+          ctx.translate(p.x, sy);
+
+          // Shadow.
+          ctx.beginPath();
+          ctx.ellipse(0, p.r * 0.95, p.r * 0.9, p.r * 0.28, 0, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(40, 91, 126, 0.16)";
+          ctx.fill();
+
+          ctx.scale(squashX, squashY);
+          ctx.beginPath();
+          const wob = Math.sin(t * 2.6) * 0.02;
+          for (let i = 0; i <= 24; i++) {
+            const a = (i / 24) * Math.PI * 2;
+            const rr = p.r * (1 + wob + Math.sin(a * 3 + t * 1.6) * 0.018);
+            const x = Math.cos(a) * rr;
+            const y = Math.sin(a) * rr;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+          const grad = ctx.createRadialGradient(-p.r * 0.34, -p.r * 0.4, p.r * 0.1, 0, 0, p.r * 1.1);
+          grad.addColorStop(0, "#ffb3c3");
+          grad.addColorStop(0.55, "#ff5a7a");
+          grad.addColorStop(1, "#d92e56");
+          ctx.fillStyle = grad;
+          ctx.fill();
+          ctx.strokeStyle = "rgba(160, 30, 65, 0.25)";
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+
+          // Face.
+          const vy = clamp(p.vx / 260, -1, 1);
+          for (const sign of [-1, 1]) {
+            ctx.beginPath();
+            ctx.ellipse(sign * p.r * 0.32, -p.r * 0.14, p.r * 0.2, p.r * 0.24, 0, 0, Math.PI * 2);
+            ctx.fillStyle = "#fff";
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(sign * p.r * 0.32 + vy * p.r * 0.08, -p.r * 0.1, p.r * 0.1, 0, Math.PI * 2);
+            ctx.fillStyle = "#25314a";
+            ctx.fill();
+          }
+          ctx.beginPath();
+          ctx.arc(0, p.r * 0.22, p.r * 0.16, 0.15, Math.PI - 0.15);
+          ctx.strokeStyle = "rgba(130, 24, 50, 0.65)";
+          ctx.lineWidth = 1.6;
+          ctx.lineCap = "round";
+          ctx.stroke();
+          ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
+          ctx.beginPath();
+          ctx.ellipse(-p.r * 0.2, p.r * 0.28, p.r * 0.2, p.r * 0.1, 0, 0, Math.PI * 2);
+          ctx.ellipse(p.r * 0.2, p.r * 0.28, p.r * 0.2, p.r * 0.1, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        function drawParticles() {
+          for (const p of state.particles) {
+            const sy = p.y - state.camY;
+            const alpha = clamp(p.life / p.maxLife, 0, 1);
+            ctx.globalAlpha = alpha * 0.9;
+            ctx.beginPath();
+            ctx.arc(p.x, sy, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          for (const f of state.floaters) {
+            const sy = f.y - state.camY;
+            const alpha = clamp(f.life / f.maxLife, 0, 1);
+            ctx.globalAlpha = alpha;
+            ctx.font = '800 16px "Baloo 2", sans-serif';
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = "rgba(23, 50, 76, 0.4)";
+            ctx.strokeText(f.text, f.x, sy);
+            ctx.fillStyle = f.color;
+            ctx.fillText(f.text, f.x, sy);
+          }
+          ctx.globalAlpha = 1;
+        }
+
+        function render(t) {
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          ctx.clearRect(0, 0, W, H);
+          drawBackground(t);
+          drawAltitudeMarks();
+          for (const platform of state.platforms) drawPlatform(platform, t);
+          for (const star of state.stars) drawStar(star, t);
+          drawParticles();
+          if (state.player && (state.mode === "playing" || state.mode === "paused" || state.mode === "menu")) drawPlayer(t);
+
+          if (state.shake > 0) {
+            ctx.fillStyle = `rgba(255,255,255,${state.shake * 0.16})`;
+            ctx.fillRect(0, 0, W, H);
+          }
+        }
+
+        function frame(now) {
+          const dt = Math.min(0.05, Math.max(0.0001, (now - state.lastFrame) / 1000));
+          state.lastFrame = now;
+          if (state.mode === "playing" || state.mode === "menu" || state.mode === "dead") update(dt);
+          render(now / 1000);
+          requestAnimationFrame(frame);
+        }
+
+        // ------------------------------------------------------------------ input
+
+        window.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") state.keys.left = true;
+          if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") state.keys.right = true;
+          if (e.key === "Escape") {
+            if (state.mode === "playing" || state.mode === "paused") togglePause();
+          }
+        });
+        window.addEventListener("keyup", (e) => {
+          if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") state.keys.left = false;
+          if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") state.keys.right = false;
+        });
+
+        window.addEventListener("pointermove", (e) => {
+          state.pointer.x = e.clientX;
+          if (e.pointerType === "touch") state.pointer.touch = true;
+        });
+        window.addEventListener("pointerdown", (e) => {
+          if (e.target && e.target.closest && e.target.closest(".overlay, .mute-btn")) return;
+          ensureAudio();
+          state.pointer.x = e.clientX;
+          state.pointer.active = true;
+          if (e.pointerType === "touch") state.pointer.touch = true;
+        });
+        window.addEventListener("pointerup", () => { state.pointer.active = false; });
+        window.addEventListener("pointercancel", () => { state.pointer.active = false; });
+
+        $("play-btn").addEventListener("click", startGame);
+        $("again-btn").addEventListener("click", startGame);
+        $("menu-btn").addEventListener("click", goToMenu);
+        $("resume-btn").addEventListener("click", togglePause);
+        $("pause-menu-btn").addEventListener("click", goToMenu);
+        muteBtn.addEventListener("click", () => {
+          muted = !muted;
+          muteBtn.classList.toggle("muted", muted);
+          if (!muted) { ensureAudio(); tone(620, 0.08, "sine", 0.02, 800); }
+        });
+        document.addEventListener("visibilitychange", () => {
+          if (document.hidden && state.mode === "playing") togglePause();
+        });
+        window.addEventListener("resize", resize);
+
+        // ------------------------------------------------------------------- boot
+
+        resize();
+        bestEl.textContent = String(state.best);
+        state.mode = "menu";
+        app.dataset.mode = "menu";
+        resetWorld();
+        state.player = null;
+        menuEl.classList.remove("is-hidden");
+        deadEl.classList.add("is-hidden");
+        pauseEl.classList.add("is-hidden");
+        state.camY = -H * 0.32;
+        renderLeaderboard();
+
+        requestAnimationFrame((now) => {
+          state.lastFrame = now;
+          requestAnimationFrame(frame);
+        });
+
+        if (new URLSearchParams(location.search).has("debug")) {
+          window.__cloudHop = { state, CONFIG, startGame, goToMenu, endGame, spawnNextPlatform, jumpReach, updatePlayer };
+        }
+      })();
+    </script>
+  </body>
+</html>

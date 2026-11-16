@@ -164,7 +164,7 @@ function updateSelectedPills(){
   });
 }
 
-function createGameCard(g){
+function createGameCard(g, opts = {}){
   const a = document.createElement('a');
   a.className = 'game-card';
   a.href = `play.html?game=${encodeURIComponent(g.id)}`;
@@ -172,11 +172,12 @@ function createGameCard(g){
   a.rel = 'noopener';
   a.setAttribute('aria-label', g.title || g.id || 'Game');
 
+  const thumbSrc = (opts.featured && g.cover) ? g.cover : g.thumbnail;
   const thumb = document.createElement('div');
   thumb.className = 'game-thumb';
-  if(g.thumbnail){
+  if(thumbSrc){
     const img = document.createElement('img');
-    img.src = g.thumbnail;
+    img.src = thumbSrc;
     img.alt = (g.title || 'Game') + ' thumbnail';
     thumb.appendChild(img);
   }
@@ -194,7 +195,8 @@ function matchesSearch(g, query){
   if(!query) return true;
   const title = (g.title || '').toLowerCase();
   const tags = (g.tags || []).join(' ').toLowerCase();
-  return title.includes(query) || tags.includes(query);
+  const tagLabels = (g.tags || []).map(formatTag).join(' ').toLowerCase();
+  return title.includes(query) || tags.includes(query) || tagLabels.includes(query);
 }
 
 function matchesTags(g, selected){
@@ -242,17 +244,16 @@ function render(){
   const shown = new Set();
   for(const sec of App.sections){
     const tag = sec.tag;
+    const isCatchAll = !tag || tag === 'all';
     let sectionGames = games.filter(g => {
-      if(shown.has(g.id)) return false;
-      return Array.isArray(g.tags) && (tag ? g.tags.includes(tag) : true);
+      if(isCatchAll) return true;
+      return Array.isArray(g.tags) && g.tags.includes(tag);
     });
-
-    sectionGames.forEach(g => shown.add(g.id));
 
     if(sectionGames.length === 0) continue;
 
     const section = document.createElement('div');
-    section.className = 'category-section';
+    section.className = 'category-section' + (tag === 'featured' ? ' featured-section' : '');
 
     const title = document.createElement('h2');
     title.className = 'category-title';
@@ -262,10 +263,10 @@ function render(){
     section.appendChild(title);
 
     const grid = document.createElement('div');
-    grid.className = 'games-grid';
+    grid.className = 'games-grid' + (tag === 'featured' ? ' featured-grid' : '');
 
     for(const g of sectionGames){
-      grid.appendChild(createGameCard(g));
+      grid.appendChild(createGameCard(g, { featured: tag === 'featured' }));
     }
 
     section.appendChild(grid);

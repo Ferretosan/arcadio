@@ -17,10 +17,10 @@
         <span>arcadio</span>
       </a>
       <ul class="navbar-links">
-        <li><a href="index.html">Library</a></li>
-        <li><a href="https://ferretosan.com">Made by Ferretosan!</a></li>
-        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScVePC8RahhnT1Hk_s6ITYWqAmxZubXW4-5F3y_sEyd7rlMDQ/viewform">Bug report</a></li>
-        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScqWY2Q1Ce2ibpoqIxBPJv6vNnmdEZon7TG0fT_u_LjbDV14Q/viewform">Suggest a game</a></li>
+        <li><a href="index.html"><img src="img/player-play.svg" alt="" class="nav-icon" />Library</a></li>
+        <li><a href="https://ferretosan.com"><img src="img/icons.svg" alt="" class="nav-icon" />More Projects</a></li>
+        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScVePC8RahhnT1Hk_s6ITYWqAmxZubXW4-5F3y_sEyd7rlMDQ/viewform"><img src="img/bug.svg" alt="" class="nav-icon" />Bug Report</a></li>
+        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScqWY2Q1Ce2ibpoqIxBPJv6vNnmdEZon7TG0fT_u_LjbDV14Q/viewform"><img src="img/bulb.svg" alt="" class="nav-icon" />Suggest a Game</a></li>
       </ul>
     </nav>
 
@@ -93,6 +93,16 @@
           </div>`
               : ""
           }
+          <div class="modal-backdrop" id="fs-modal">
+            <div class="modal" role="dialog" aria-modal="true" aria-labelledby="fs-modal-title">
+              <h3 id="fs-modal-title">Reload game?</h3>
+              <p>Some games don't scale properly when going into fullscreen. Reloading can fix this.</p>
+              <div class="modal-actions">
+                <button class="btn" id="fs-no-reload">No, just fullscreen</button>
+                <button class="btn btn-primary" id="fs-reload">Reload &amp; fullscreen</button>
+              </div>
+            </div>
+          </div>
         `;
 
         if (params.get("fullscreen") === "1") {
@@ -102,16 +112,44 @@
         }
 
         const fsBtn = document.getElementById("fs-btn");
-        if (fsBtn) {
+        const fsModal = document.getElementById("fs-modal");
+        const fsReloadBtn = document.getElementById("fs-reload");
+        const fsNoReloadBtn = document.getElementById("fs-no-reload");
+
+        function requestFrameFullscreen() {
+          const frame = document.querySelector(".game-frame");
+          if (!frame) return;
+          if (frame.requestFullscreen) {
+            frame.requestFullscreen().catch(() => {});
+          } else if (frame.webkitRequestFullscreen) {
+            frame.webkitRequestFullscreen();
+          }
+        }
+
+        if (fsBtn && fsModal) {
           fsBtn.addEventListener("click", () => {
-            const frame = document.querySelector(".game-frame");
-            if (!frame) return;
-            if (frame.requestFullscreen) {
-              frame.requestFullscreen().catch(() => {});
-            } else if (frame.webkitRequestFullscreen) {
-              frame.webkitRequestFullscreen();
-            }
+            fsModal.classList.add("show");
           });
+
+          fsModal.addEventListener("click", (e) => {
+            if (e.target === fsModal) fsModal.classList.remove("show");
+          });
+
+          if (fsNoReloadBtn) {
+            fsNoReloadBtn.addEventListener("click", () => {
+              fsModal.classList.remove("show");
+              requestFrameFullscreen();
+            });
+          }
+
+          if (fsReloadBtn) {
+            fsReloadBtn.addEventListener("click", () => {
+              fsModal.classList.remove("show");
+              const iframe = document.querySelector(".game-frame iframe");
+              if (iframe) iframe.src = iframe.src;
+              requestFrameFullscreen();
+            });
+          }
         }
 
         function escapeHtml(str) {
