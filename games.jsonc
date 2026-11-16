@@ -172,17 +172,6 @@
       "thumbnail": "newicons/basket random.webp"
     },
     {
-      "id": "bitlife",
-      "title": "BitLife",
-      "url": "games/bitlife/index.html",
-      "tags": [
-        "simulation",
-        "idle",
-        "all"
-      ],
-      "thumbnail": "games/bitlife/logo.png"
-    },
-    {
       "id": "blackholesquare",
       "title": "Black Hole Square",
       "url": "games/blackholesquare/index.html",
